@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:app_book_store/services/auth_services.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -53,6 +55,7 @@ class _LoginScreenState extends State<LoginScreen> {
             padding: const EdgeInsets.all(40),
             child: Column(
               mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const Text(
                   'Login',
@@ -61,7 +64,14 @@ class _LoginScreenState extends State<LoginScreen> {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                const SizedBox(height: 30),
+                const SizedBox(height: 20),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 5),
+                  child: Text('Email',
+                      style: TextStyle(
+                        fontSize: 16,
+                      )),
+                ),
                 TextField(
                   controller: _usernameController,
                   decoration: const InputDecoration(
@@ -71,12 +81,21 @@ class _LoginScreenState extends State<LoginScreen> {
                     focusedBorder: OutlineInputBorder(
                       borderSide: BorderSide(color: Colors.blue),
                     ),
-                    label: Text(
-                      'Email',
-                    ),
+
+                    // hintText: 'Email',
+                    // label: Text(
+                    //   'Email',
+                    // ),
                   ),
                 ),
-                const SizedBox(height: 10),
+                const SizedBox(height: 20),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 5),
+                  child: Text('Password',
+                      style: TextStyle(
+                        fontSize: 16,
+                      )),
+                ),
                 TextField(
                   controller: _passwordController,
                   obscureText: true,
@@ -87,54 +106,74 @@ class _LoginScreenState extends State<LoginScreen> {
                     focusedBorder: OutlineInputBorder(
                       borderSide: BorderSide(color: Colors.blue),
                     ),
-                    label: Text('Password'),
                   ),
                 ),
-                Align(
-                    alignment: Alignment.centerLeft,
-                    child: TextButton(
-                      onPressed: () {
-                        Navigator.pushNamed(context, AppRoutes.forgetpassword);
-                        // Navigator.push(
-                        //   context,
-                        //   MaterialPageRoute(
-                        //       builder: (context) =>
-                        //           const ForgotpasswordScreen()),
-                        // );
-                      },
-                      style: TextButton.styleFrom(
-                        foregroundColor: Colors.grey, // Text color
-                        textStyle: const TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.bold,
+
+                TextButton(
+                  onPressed: () {
+                    Navigator.pushNamed(context, AppRoutes.forgetpassword);
+                    // Navigator.push(
+                    //   context,
+                    //   MaterialPageRoute(
+                    //       builder: (context) =>
+                    //           const ForgotpasswordScreen()),
+                    // );
+                  },
+                  style: TextButton.styleFrom(
+                    foregroundColor: Colors.grey, // Text color
+                    textStyle: const TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  child: const Text('Forgot Password?'),
+                ),
+                TextButton(
+                  onPressed: () {
+                    Navigator.pushNamed(context, AppRoutes.signup);
+                    // Navigator.push(
+                    //   context,
+                    //   MaterialPageRoute(
+                    //       builder: (context) => const SignupScreen()),
+                    // );
+                  },
+                  style: TextButton.styleFrom(
+                    foregroundColor: Colors.grey, // Text color
+                    textStyle: const TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  child: const Text('Don\'t have an account? Sign up here'),
+                ),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const SizedBox(height: 20),
+                    Container(
+                      width: double.infinity,
+
+                      // Make the button as wide as its parent
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor:
+                              const Color.fromARGB(255, 237, 86, 132),
+                          elevation: 5,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
+                        onPressed: _login,
+                        child: const Text(
+                          'Login',
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: Colors.white,
+                          ),
                         ),
                       ),
-                      child: const Text('Forgot Password?'),
-                    )),
-                Align(
-                    alignment: Alignment.centerLeft,
-                    child: TextButton(
-                      onPressed: () {
-                        Navigator.pushNamed(context, AppRoutes.signup);
-                        // Navigator.push(
-                        //   context,
-                        //   MaterialPageRoute(
-                        //       builder: (context) => const SignupScreen()),
-                        // );
-                      },
-                      style: TextButton.styleFrom(
-                        foregroundColor: Colors.grey, // Text color
-                        textStyle: const TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      child: const Text('Don\'t have an account? Sign up here'),
-                    )),
-                const SizedBox(height: 30),
-                ElevatedButton(
-                  onPressed: _login,
-                  child: const Text('Login'),
+                    ),
+                  ],
                 ),
                 SizedBox(height: 10),
                 Text(
