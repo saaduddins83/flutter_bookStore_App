@@ -25,6 +25,7 @@ class _SignupScreenState extends State<SignupScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Please fill in all fields')),
       );
+
       return;
     }
     if (_passwordController.text != _confirmPasswordController.text) {
@@ -130,9 +131,7 @@ class _SignupScreenState extends State<SignupScreen> {
                       ),
                       padding: const EdgeInsets.symmetric(vertical: 15),
                     ),
-                    onPressed: () {
-                      // Sign up logic
-                    },
+                    onPressed: _signup,
                     child: const Text(
                       'Sign Up',
                       style: TextStyle(
