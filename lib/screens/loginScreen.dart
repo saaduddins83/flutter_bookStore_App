@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:app_book_store/services/auth_services.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -112,7 +110,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     const SizedBox(height: 20),
-                    Container(
+                    SizedBox(
                       width: double.infinity,
 
                       // Make the button as wide as its parent
@@ -136,76 +134,118 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                       ),
                     ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        TextButton(
+                          onPressed: () {
+                            Navigator.pushNamed(
+                                context, AppRoutes.forgetpassword);
+                            // Navigator.push(
+                            //   context,
+                            //   MaterialPageRoute(
+                            //       builder: (context) =>
+                            //           const ForgotpasswordScreen()),
+                            // );
+                          },
+                          style: TextButton.styleFrom(
+                            foregroundColor: Colors.grey, // Text color
+                            textStyle: const TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          child: const Text('Forgot Password?'),
+                        ),
+                      ],
+                    ),
+                    //Divider starts here
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 10),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Expanded(
+                            child: Divider(
+                              color: Colors.grey,
+                            ),
+                          ),
+                          Container(
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(5),
+                              border: Border.all(
+                                color: Colors.grey,
+                              ),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.all(3.0),
+                              child: Text(
+                                'OR',
+                                style: TextStyle(
+                                  color: Colors.grey,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          ),
+                          Expanded(
+                            child: Divider(
+                              color: Colors.grey,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+
+                    // Divider with padding ends here
+
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 10),
+                      child: SignInButton(
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(5))),
+                        buttonType: ButtonType.google,
+                        onPressed: () async {
+                          final user =
+                              await AuthService().signInWithGoogle(context);
+                          if (user != null) {
+                            // Successfully signed in
+                            // print("Signed in as: ${user.displayName}");
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              Snackbar.createSnackBar("Login Successful"),
+                            );
+                          } else {
+                            // Sign-in failed or canceled
+                            // print("Google Sign-In failed");
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              Snackbar.createSnackBar("Login Failed"),
+                            );
+                          }
+                        },
+                      ),
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        Navigator.pushNamed(context, AppRoutes.signup);
+                        // Navigator.push(
+                        //   context,
+                        //   MaterialPageRoute(
+                        //       builder: (context) => const SignupScreen()),
+                        // );
+                      },
+                      style: TextButton.styleFrom(
+                        foregroundColor: Colors.grey, // Text color
+                        textStyle: const TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      child: const Text('Need an account? Sign up here'),
+                    ),
                   ],
                 ),
-                const SizedBox(height: 10),
-                Divider(
-                  color: Colors.grey,
-                  height: 20,
-                  thickness: 1,
-                  indent: 0,
-                  endIndent: 0,
-                ),
-                TextButton(
-                  onPressed: () {
-                    Navigator.pushNamed(context, AppRoutes.forgetpassword);
-                    // Navigator.push(
-                    //   context,
-                    //   MaterialPageRoute(
-                    //       builder: (context) =>
-                    //           const ForgotpasswordScreen()),
-                    // );
-                  },
-                  style: TextButton.styleFrom(
-                    foregroundColor: Colors.grey, // Text color
-                    textStyle: const TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  child: const Text('Forgot Password?'),
-                ),
-                TextButton(
-                  onPressed: () {
-                    Navigator.pushNamed(context, AppRoutes.signup);
-                    // Navigator.push(
-                    //   context,
-                    //   MaterialPageRoute(
-                    //       builder: (context) => const SignupScreen()),
-                    // );
-                  },
-                  style: TextButton.styleFrom(
-                    foregroundColor: Colors.grey, // Text color
-                    textStyle: const TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  child: const Text('Don\'t have an account? Sign up here'),
-                ),
 
-                SizedBox(height: 10),
-                Text(
-                  'Or',
-                  style: TextStyle(
-                    color: Colors.grey,
-                    fontSize: 12,
-                  ),
-                ),
-                SizedBox(height: 10),
-                SignInButton(
-                  buttonType: ButtonType.google,
-                  onPressed: () async {
-                    final user = await AuthService().signInWithGoogle(context);
-                    if (user != null) {
-                      // Successfully signed in
-                      print("Signed in as: ${user.displayName}");
-                    } else {
-                      // Sign-in failed or canceled
-                      print("Google Sign-In failed");
-                    }
-                  },
-                ),
                 // ElevatedButton(
                 //   onPressed: () async {
                 //     final user =
