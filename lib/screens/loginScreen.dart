@@ -1,11 +1,14 @@
 import 'dart:math';
 
+import 'package:app_book_store/providers/visibility_provider.dart';
 import 'package:app_book_store/services/auth_services.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:app_book_store/widgets/snackbar.dart';
+import 'package:provider/provider.dart';
 import 'package:sign_button/sign_button.dart';
 import 'package:app_book_store/routes/app_routes.dart';
+// import 'package:app_book_store/screens/signupScreen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -72,7 +75,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         fontSize: 16,
                       )),
                 ),
-                TextField(
+                TextFormField(
                   controller: _usernameController,
                   decoration: const InputDecoration(
                     enabledBorder: OutlineInputBorder(
@@ -91,22 +94,46 @@ class _LoginScreenState extends State<LoginScreen> {
                 const SizedBox(height: 20),
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 5),
-                  child: Text('Password',
-                      style: TextStyle(
-                        fontSize: 16,
-                      )),
-                ),
-                TextField(
-                  controller: _passwordController,
-                  obscureText: true,
-                  decoration: const InputDecoration(
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.black),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.blue),
+                  child: Text(
+                    'Password',
+                    style: TextStyle(
+                      fontSize: 16,
                     ),
                   ),
+                ),
+                const SizedBox(height: 10),
+
+                Consumer<VisibilityProvider>(
+                  builder: (context, provider, child) {
+                    return TextFormField(
+                      controller: _passwordController,
+                      obscureText: provider.isVisible,
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return 'Password is required';
+                        }
+                        return null;
+                      },
+                      decoration: InputDecoration(
+                        suffixIcon: GestureDetector(
+                          onTap: () {
+                            provider.changeVisibility();
+                          },
+                          child: Icon(
+                            provider.isVisible
+                                ? Icons.visibility_off
+                                : Icons.visibility,
+                          ),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.black),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.blue),
+                        ),
+                      ),
+                    );
+                  },
                 ),
 
                 TextButton(
