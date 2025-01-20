@@ -108,7 +108,44 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                   ),
                 ),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const SizedBox(height: 20),
+                    Container(
+                      width: double.infinity,
 
+                      // Make the button as wide as its parent
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor:
+                              const Color.fromARGB(255, 237, 86, 132),
+                          elevation: 5,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          padding: const EdgeInsets.all(15),
+                        ),
+                        onPressed: _login,
+                        child: const Text(
+                          'Login',
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 10),
+                Divider(
+                  color: Colors.grey,
+                  height: 20,
+                  thickness: 1,
+                  indent: 0,
+                  endIndent: 0,
+                ),
                 TextButton(
                   onPressed: () {
                     Navigator.pushNamed(context, AppRoutes.forgetpassword);
@@ -146,35 +183,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   child: const Text('Don\'t have an account? Sign up here'),
                 ),
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const SizedBox(height: 20),
-                    Container(
-                      width: double.infinity,
 
-                      // Make the button as wide as its parent
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor:
-                              const Color.fromARGB(255, 237, 86, 132),
-                          elevation: 5,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                        ),
-                        onPressed: _login,
-                        child: const Text(
-                          'Login',
-                          style: TextStyle(
-                            fontSize: 16,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
                 SizedBox(height: 10),
                 Text(
                   'Or',
