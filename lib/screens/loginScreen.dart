@@ -13,14 +13,21 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  final TextEditingController _usernameController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
   Future<void> _login() async {
+    if (_emailController.text.isEmpty || _passwordController.text.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Please fill in all fields')),
+      );
+      return;
+    }
+
     try {
       await _auth.signInWithEmailAndPassword(
-          email: _usernameController.text, password: _passwordController.text);
+          email: _emailController.text, password: _passwordController.text);
       ScaffoldMessenger.of(context).showSnackBar(
         Snackbar.createSnackBar("Login Successful"),
       );
@@ -71,7 +78,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       )),
                 ),
                 TextField(
-                  controller: _usernameController,
+                  controller: _emailController,
                   decoration: const InputDecoration(
                     enabledBorder: OutlineInputBorder(
                       borderSide: BorderSide(color: Colors.black),

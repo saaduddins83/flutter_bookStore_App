@@ -21,6 +21,12 @@ class _SignupScreenState extends State<SignupScreen> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
   Future<void> _signup() async {
+    if (_emailController.text.isEmpty || _passwordController.text.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Please fill in all fields')),
+      );
+      return;
+    }
     if (_passwordController.text != _confirmPasswordController.text) {
       ScaffoldMessenger.of(context).showSnackBar(
         Snackbar.createSnackBar("Passwords do not match"),
@@ -76,19 +82,36 @@ class _SignupScreenState extends State<SignupScreen> {
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 5),
                   child: TextField(
+                    controller: _emailController,
                     decoration: InputDecoration(
                       border: OutlineInputBorder(),
                     ),
                   ),
                 ),
                 const SizedBox(height: 10),
-                Text('Email',
+                Text('Password',
                     style: TextStyle(
                       fontSize: 16,
                     )),
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 5),
                   child: TextField(
+                    controller: _passwordController,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(),
+                    ),
+                    obscureText: true,
+                  ),
+                ),
+                const SizedBox(height: 10),
+                Text('Confirm Password',
+                    style: TextStyle(
+                      fontSize: 16,
+                    )),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 5),
+                  child: TextField(
+                    controller: _confirmPasswordController,
                     decoration: InputDecoration(
                       border: OutlineInputBorder(),
                     ),
