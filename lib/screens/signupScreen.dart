@@ -119,7 +119,7 @@ class _SignupScreenState extends State<SignupScreen> {
                   ),
                 ),
                 const SizedBox(height: 20),
-                Container(
+                SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
