@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:app_book_store/providers/visibility_provider.dart';
 import 'package:app_book_store/services/auth_services.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -177,7 +175,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     const SizedBox(height: 20),
-                    Container(
+                    SizedBox(
                       width: double.infinity,
 
                       // Make the button as wide as its parent

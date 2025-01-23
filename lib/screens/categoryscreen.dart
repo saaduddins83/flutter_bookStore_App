@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:app_book_store/screens/signupScreen.dart';
 
 class CategoryScreen extends StatelessWidget {
   const CategoryScreen({super.key});

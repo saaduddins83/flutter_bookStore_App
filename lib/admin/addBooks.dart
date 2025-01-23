@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:app_book_store/models/book.dart';
 import 'package:app_book_store/admin/book_listing.dart';
+import 'package:uuid/uuid.dart';
 
 class AddBookPage extends StatefulWidget {
   const AddBookPage({super.key});
@@ -11,6 +12,7 @@ class AddBookPage extends StatefulWidget {
 }
 
 class _AddBookPageState extends State<AddBookPage> {
+  final Uuid uuid = Uuid();
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _authorController = TextEditingController();
@@ -19,9 +21,10 @@ class _AddBookPageState extends State<AddBookPage> {
 
   void _submitForm() {
     if (_formKey.currentState!.validate()) {
+      final String BookId = uuid.v4();
       // Collect book data
       final book = Book(
-        id: DateTime.now().toString(), // Generate a unique ID
+        id: BookId, // Generate a unique ID
         title: _titleController.text,
         author: _authorController.text,
         price: double.parse(_priceController.text),

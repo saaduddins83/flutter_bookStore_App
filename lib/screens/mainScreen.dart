@@ -1,9 +1,10 @@
+import 'package:app_book_store/screens/categoryscreen.dart';
 import 'package:flutter/material.dart';
 // TODO: add flutter_svg to pubspec.yaml
 import 'package:flutter_svg/flutter_svg.dart';
 
 class MainScreen extends StatelessWidget {
-  static String routeName = "/home";
+  // static String routeName = "/home";
 
   const MainScreen({super.key});
   @override
@@ -11,6 +12,12 @@ class MainScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text("Home"),
+        leading: IconButton(
+          icon: Icon(Icons.menu),
+          onPressed: () {
+            Scaffold.of(context).openDrawer();
+          },
+        ),
         actions: [
           IconBtnWithCounter(
             // numOfitem: 3,
@@ -23,7 +30,68 @@ class MainScreen extends StatelessWidget {
             numOfitem: 3,
             press: () {},
           ),
+          const SizedBox(width: 8),
+          GestureDetector(
+            onTap: () {
+              Scaffold.of(context).openEndDrawer();
+            },
+            child: CircleAvatar(
+              backgroundImage: NetworkImage(
+                "https://i.postimg.cc/7ZQYv8Vv/Profile-Image.png",
+              ),
+              onBackgroundImageError: (_, __) {
+                // Handle error
+              },
+              child: Image.network(
+                "https://i.postimg.cc/7ZQYv8Vv/Profile-Image.png",
+                errorBuilder: (context, error, stackTrace) {
+                  return Icon(Icons.person); // Default profile icon
+                },
+              ),
+            ),
+          ),
+          const SizedBox(width: 8),
         ],
+      ),
+      drawer: Drawer(
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: <Widget>[
+            DrawerHeader(
+              decoration: BoxDecoration(
+                color: Colors.blue,
+              ),
+              child: Text(
+                'Profile',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 24,
+                ),
+              ),
+            ),
+            ListTile(
+              leading: Icon(Icons.account_circle),
+              title: Text('Account'),
+              onTap: () {
+                // Handle account tap
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.settings),
+              title: Text('Settings'),
+              onTap: () {
+                // Handle settings tap
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.logout),
+              title: Text('Logout'),
+              onTap: () {
+                // Handle logout tap
+              },
+            ),
+          ],
+        ),
       ),
       body: const SafeArea(
         child: SingleChildScrollView(
@@ -32,9 +100,18 @@ class MainScreen extends StatelessWidget {
             children: [
               HomeHeader(),
               DiscountBanner(),
+              Padding(
+                padding: EdgeInsets.all(15.0),
+                child: BigCardImageSlide(images: [
+                  "https://i.postimg.cc/3kLKCFGr/02.jpg",
+                  "https://i.postimg.cc/Yv2rWshy/03.jpg",
+                ]),
+              ),
+              SizedBox(height: 20),
               PopularProducts(),
               SizedBox(height: 20),
               RecentlyAddedProducts(),
+              BestSellers(),
             ],
           ),
         ),
@@ -166,32 +243,44 @@ class DiscountBanner extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      margin: const EdgeInsets.all(20),
-      padding: const EdgeInsets.symmetric(
-        horizontal: 20,
-        vertical: 16,
-      ),
-      decoration: BoxDecoration(
-        color: const Color(0xFF4A3298),
-        borderRadius: BorderRadius.circular(20),
-      ),
-      child: const Text.rich(
-        TextSpan(
-          style: TextStyle(color: Colors.white),
-          children: [
-            TextSpan(text: "A Summer Surpise\n"),
-            TextSpan(
-              text: "Cashback 20%",
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ],
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(left: 25, top: 10),
+          child: Title(
+              color: Colors.black,
+              child: Text("Special for you",
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600))),
         ),
-      ),
+        Container(
+          width: double.infinity,
+          margin: const EdgeInsets.all(20),
+          padding: const EdgeInsets.symmetric(
+            horizontal: 20,
+            vertical: 16,
+          ),
+          decoration: BoxDecoration(
+            color: const Color(0xFF4A3298),
+            borderRadius: BorderRadius.circular(20),
+          ),
+          child: const Text.rich(
+            TextSpan(
+              style: TextStyle(color: Colors.white),
+              children: [
+                TextSpan(text: "A Summer Surpise\n"),
+                TextSpan(
+                  text: "Cashback 20%",
+                  style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ],
     );
   }
 }
@@ -212,6 +301,7 @@ class SectionTitle extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(
+          textAlign: TextAlign.center,
           title,
           style: const TextStyle(
             fontSize: 16,
@@ -243,27 +333,154 @@ class PopularProducts extends StatelessWidget {
             press: () {},
           ),
         ),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: GridView.builder(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
+        SizedBox(
+          height: 250,
+          child: ListView.builder(
+            scrollDirection: Axis.horizontal,
             itemCount: demoProducts.length,
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              crossAxisSpacing: 16,
-              mainAxisSpacing: 20,
-              childAspectRatio: 0.7,
-            ),
             itemBuilder: (context, index) {
-              return ProductCard(
-                product: demoProducts[index],
-                onPress: () {},
+              return Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8),
+                child: ProductCard(
+                  product: demoProducts[index],
+                  onPress: () {},
+                ),
               );
             },
           ),
         ),
       ],
+    );
+  }
+}
+
+class BestSellers extends StatelessWidget {
+  const BestSellers({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      elevation: 5.0,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10.0),
+      ),
+      child: Container(
+        padding: EdgeInsets.all(16.0),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            ClipRRect(
+              borderRadius: BorderRadius.circular(8.0),
+              child: Image.network(
+                'https://i.postimg.cc/VdWs58LC/01.jpg',
+                width: 100.0,
+                height: 150.0,
+                fit: BoxFit.cover,
+              ),
+            ),
+            SizedBox(width: 16.0),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Ling, Daniel',
+                      style: TextStyle(
+                        fontSize: 18.0,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    SizedBox(height: 8.0),
+                    Text(
+                      'Complete design thinking guide for successful professionals',
+                      style: TextStyle(
+                        color: Colors.grey,
+                      ),
+                    ),
+                    SizedBox(height: 16.0),
+                    Wrap(
+                      direction: Axis.vertical,
+                      spacing: 8.0, // gap between adjacent chips
+                      runSpacing: 4.0, // gap between lines
+                      children: <Widget>[
+                        Chip(
+                          label: Text(
+                            'Technology',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Colors.orange,
+                            ),
+                          ),
+                          backgroundColor:
+                              const Color.fromARGB(99, 255, 153, 0),
+                        ),
+                        Chip(
+                          label: Text(
+                            'Design',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Colors.red,
+                            ),
+                          ),
+                          backgroundColor:
+                              const Color.fromARGB(99, 255, 82, 82),
+                        ),
+                        Chip(
+                          label: Text(
+                            'Innovation',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Colors.deepPurple,
+                            ),
+                          ),
+                          backgroundColor:
+                              const Color.fromARGB(99, 155, 39, 176),
+                        ),
+                        Chip(
+                          label: Text(
+                            'Business',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Colors.green,
+                            ),
+                          ),
+                          backgroundColor:
+                              const Color.fromARGB(99, 139, 195, 74),
+                        ),
+                        Chip(
+                          label: Text(
+                            'Marketing',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: const Color.fromARGB(255, 3, 88, 158),
+                            ),
+                          ),
+                          backgroundColor:
+                              const Color.fromARGB(99, 33, 149, 243),
+                        ),
+                        // Add more chips as needed
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            SizedBox(width: 16.0),
+            Align(
+              alignment: Alignment.bottomRight,
+              child: Text(
+                'Rs. 780',
+                style: TextStyle(
+                  fontSize: 18.0,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
@@ -334,7 +551,7 @@ class ProductCard extends StatelessWidget {
               child: Container(
                 padding: const EdgeInsets.all(20),
                 decoration: BoxDecoration(
-                  color: const Color(0xFF979797).withOpacity(0.1),
+                  color: const Color.fromARGB(30, 151, 151, 151),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Image.network(product.images[0]),
@@ -346,11 +563,24 @@ class ProductCard extends StatelessWidget {
               style: Theme.of(context).textTheme.bodyMedium,
               maxLines: 2,
             ),
+            SizedBox(height: 8.0),
+            Expanded(
+              child: Text(
+                product.description,
+                style: TextStyle(
+                  fontSize: 12.0,
+                  color: Colors.grey,
+                ),
+                maxLines: 2,
+                overflow: TextOverflow.clip,
+              ),
+            ),
+            SizedBox(height: 8.0),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  "\$${product.price}",
+                  "PKR. ${product.price}",
                   style: const TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.w600,
@@ -393,14 +623,14 @@ class Product {
   final int id;
   final String title, description;
   final List<String> images;
-  final List<Color> colors;
+  // final List<Color> colors;
   final double rating, price;
   final bool isFavourite, isPopular;
 
   Product({
     required this.id,
     required this.images,
-    required this.colors,
+    // required this.colors,
     this.rating = 0.0,
     this.isFavourite = false,
     this.isPopular = false,
@@ -415,16 +645,16 @@ class Product {
 List<Product> demoProducts = [
   Product(
     id: 1,
-    images: ["https://i.postimg.cc/c19zpJ6f/Image-Popular-Product-1.png"],
-    colors: [
-      const Color(0xFFF6625E),
-      const Color(0xFF836DB8),
-      const Color(0xFFDECB9C),
-      Colors.white,
-    ],
-    title: "Wireless Controller for PS4™",
+    images: ["https://i.postimg.cc/3kLKCFGr/02.jpg"],
+    // colors: [
+    //   const Color(0xFFF6625E),
+    //   const Color(0xFF836DB8),
+    //   const Color(0xFFDECB9C),
+    //   Colors.white,
+    // ],
+    title: "The Lawser",
     price: 64.99,
-    description: description,
+    description: 'The Lawser is a book by John Grisham',
     rating: 4.8,
     isFavourite: true,
     isPopular: true,
@@ -432,34 +662,34 @@ List<Product> demoProducts = [
   Product(
     id: 2,
     images: [
-      "https://i.postimg.cc/CxD6nH74/Image-Popular-Product-2.png",
+      "https://i.postimg.cc/Yv2rWshy/03.jpg",
     ],
-    colors: [
-      const Color(0xFFF6625E),
-      const Color(0xFF836DB8),
-      const Color(0xFFDECB9C),
-      Colors.white,
-    ],
-    title: "Nike Sport White - Man Pant",
+    // colors: [
+    //   const Color(0xFFF6625E),
+    //   const Color(0xFF836DB8),
+    //   const Color(0xFFDECB9C),
+    //   Colors.white,
+    // ],
+    title: "The Adventure",
     price: 50.5,
-    description: description,
+    description: "The Adventure is a book by John Grisham",
     rating: 4.1,
     isPopular: true,
   ),
   Product(
     id: 3,
     images: [
-      "https://i.postimg.cc/1XjYwvbv/glap.png",
+      "https://i.postimg.cc/f3JMHS7c/04.jpg",
     ],
-    colors: [
-      const Color(0xFFF6625E),
-      const Color(0xFF836DB8),
-      const Color(0xFFDECB9C),
-      Colors.white,
-    ],
-    title: "Gloves XC Omega - Polygon",
+    // colors: [
+    //   const Color(0xFFF6625E),
+    //   const Color(0xFF836DB8),
+    //   const Color(0xFFDECB9C),
+    //   Colors.white,
+    // ],
+    title: "The Magnolia Table",
     price: 36.55,
-    description: description,
+    description: "The Magnolia Table is a book by John Grisham",
     rating: 4.1,
     isFavourite: true,
     isPopular: true,
@@ -467,17 +697,17 @@ List<Product> demoProducts = [
   Product(
     id: 4,
     images: [
-      "https://i.postimg.cc/d1QWXMYW/Image-Popular-Product-3.png",
+      "https://i.postimg.cc/wyNgzKG3/05.jpg",
     ],
-    colors: [
-      const Color(0xFFF6625E),
-      const Color(0xFF836DB8),
-      const Color(0xFFDECB9C),
-      Colors.white,
-    ],
-    title: "Gloves XC Omega - Polygon",
+    // colors: [
+    //   const Color(0xFFF6625E),
+    //   const Color(0xFF836DB8),
+    //   const Color(0xFFDECB9C),
+    //   Colors.white,
+    // ],
+    title: "The Saint X",
     price: 36.55,
-    description: description,
+    description: "The Saint X is a book by John Grisham",
     rating: 4.1,
     isFavourite: false,
     isPopular: true,

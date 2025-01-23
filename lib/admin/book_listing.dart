@@ -1,10 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:app_book_store/routes/app_routes.dart';
+// import 'package:uuid/uuid.dart';
 
-class BookListPage extends StatelessWidget {
-  const BookListPage({Key? key}) : super(key: key);
+class BookListPage extends StatefulWidget {
+  const BookListPage({super.key});
 
+  @override
+  State<BookListPage> createState() => _BookListPageState();
+}
+
+class _BookListPageState extends State<BookListPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -128,6 +134,28 @@ class BookListPage extends StatelessWidget {
                             );
                           },
                         ),
+                        IconButton(
+                            icon: const Icon(
+                              Icons.delete,
+                              color: Colors.teal,
+                            ),
+                            onPressed: () async {
+                              try {
+                                await FirebaseFirestore.instance
+                                    .collection('books')
+                                    .doc(book.id)
+                                    .delete();
+
+                                ScaffoldMessenger.of(context)
+                                    .showSnackBar(const SnackBar(
+                                  content: Text('Book Deleted Successfully!'),
+                                ));
+                              } catch (e) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                        content: Text('Failed to delete')));
+                              }
+                            }),
                       ],
                     ),
                   ),

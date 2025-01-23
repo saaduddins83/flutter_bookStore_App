@@ -1,5 +1,4 @@
 // import 'package:app_book_store/screens/login.dart';
-import 'package:app_book_store/admin/addBooks.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
@@ -37,7 +36,7 @@ class Myapp extends StatelessWidget {
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
           useMaterial3: true,
         ),
-        initialRoute: AppRoutes.addbooks,
+        initialRoute: AppRoutes.userAccount,
         onGenerateRoute: AppRoutes.generateRoute,
         // home: const MyHomePage(),
       ),
