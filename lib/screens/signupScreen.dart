@@ -1,6 +1,7 @@
 import 'package:app_book_store/routes/app_routes.dart';
 import 'package:app_book_store/services/auth_services.dart';
 import 'package:app_book_store/widgets/snackbar.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:sign_button/sign_button.dart';
@@ -35,10 +36,15 @@ class _SignupScreenState extends State<SignupScreen> {
     }
 
     try {
-      await _auth.createUserWithEmailAndPassword(
+      final UserCredential user = await _auth.createUserWithEmailAndPassword(
         email: _emailController.text,
         password: _passwordController.text,
       );
+      FirebaseFirestore.instance.collection('users').doc(user.user!.uid).set({
+        'email': user.user!.email,
+        'uid': user.user!.uid,
+      });
+      print(user);
       ScaffoldMessenger.of(context).showSnackBar(
         Snackbar.createSnackBar('Signup Successful'),
       );

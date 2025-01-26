@@ -21,10 +21,10 @@ class _AddBookPageState extends State<AddBookPage> {
 
   void _submitForm() {
     if (_formKey.currentState!.validate()) {
-      final String BookId = uuid.v4();
+      final String bookId = uuid.v4();
       // Collect book data
       final book = Book(
-        id: BookId, // Generate a unique ID
+        id: bookId, // Generate a unique ID
         title: _titleController.text,
         author: _authorController.text,
         price: double.parse(_priceController.text),

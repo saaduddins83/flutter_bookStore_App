@@ -16,6 +16,29 @@ class _BigCardImageSlideState extends State<BigCardImageSlide> {
   int intialIndex = 0;
 
   @override
+  initState() {
+    super.initState();
+    timer();
+  }
+
+  PageController pageController = PageController();
+
+  timer() {
+    Future.delayed(const Duration(seconds: 2), () {
+      print(pageController.page!.toInt());
+      if (pageController.page!.toInt() < widget.images.length - 1) {
+        pageController.animateToPage(pageController.page!.toInt() + 1,
+            duration: Duration(milliseconds: 800), curve: Curves.easeIn);
+      } else {
+        pageController.animateToPage(0,
+            duration: Duration(milliseconds: 800), curve: Curves.easeIn);
+      }
+      setState(() {});
+      timer();
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return AspectRatio(
       aspectRatio: 1.81,
@@ -27,6 +50,7 @@ class _BigCardImageSlideState extends State<BigCardImageSlide> {
                 intialIndex = value;
               });
             },
+            controller: pageController,
             itemCount: widget.images.length,
             itemBuilder: (context, index) =>
                 BigCardImage(image: widget.images[index]),
@@ -61,14 +85,9 @@ class BigCardImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: const BorderRadius.all(Radius.circular(12)),
-        image: DecorationImage(
-          image: NetworkImage(image),
-          fit: BoxFit.cover,
-        ),
-      ),
+    return Image.network(
+      image,
+      fit: BoxFit.fitHeight,
     );
   }
 }

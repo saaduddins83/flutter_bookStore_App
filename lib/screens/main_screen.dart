@@ -1,7 +1,7 @@
 import 'package:app_book_store/providers/cartProvider.dart';
 import 'package:app_book_store/routes/app_routes.dart';
-import 'package:app_book_store/screens/categoryscreen.dart';
 import 'package:app_book_store/screens/checkOutScreen.dart';
+import 'package:app_book_store/widgets/bigCardImageSlide.dart';
 import 'package:app_book_store/widgets/iconBtnWithCounter.dart';
 import 'package:app_book_store/widgets/icons.dart';
 import 'package:app_book_store/widgets/productCard.dart';
@@ -112,6 +112,9 @@ class MainScreen extends StatelessWidget {
                 child: BigCardImageSlide(images: [
                   "https://i.postimg.cc/3kLKCFGr/02.jpg",
                   "https://i.postimg.cc/Yv2rWshy/03.jpg",
+                  "https://i.postimg.cc/tntb13yj/07.jpg",
+                  "https://i.postimg.cc/jDkbJdVL/08.jpg",
+                  "https://i.postimg.cc/MM1247nQ/09.jpg",
                 ]),
               ),
               const SizedBox(height: 20),

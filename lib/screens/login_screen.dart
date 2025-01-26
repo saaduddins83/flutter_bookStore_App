@@ -1,5 +1,6 @@
 import 'package:app_book_store/providers/visibility_provider.dart';
 import 'package:app_book_store/services/auth_services.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:app_book_store/widgets/snackbar.dart';
@@ -22,12 +23,22 @@ class _LoginScreenState extends State<LoginScreen> {
 
   Future<void> _login() async {
     try {
-      await _auth.signInWithEmailAndPassword(
+      final UserCredential user = await _auth.signInWithEmailAndPassword(
           email: _usernameController.text, password: _passwordController.text);
       ScaffoldMessenger.of(context).showSnackBar(
         Snackbar.createSnackBar("Login Successful"),
       );
-      Navigator.pushNamed(context, AppRoutes.main);
+      final DocumentSnapshot userdata = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(user.user!.uid)
+          .get();
+      final Map userjson = (userdata.data() ?? {}) as Map;
+      final bool? isadmin = userjson["admin"];
+
+      Navigator.pushReplacementNamed(
+        context, isadmin == true ? AppRoutes.booklisting : AppRoutes.main,
+        //arguments: user.user!.uid
+      );
       // Navigator.push(
       //     context, MaterialPageRoute(builder: (context) => const MainScreen()));
     } catch (e) {
@@ -40,6 +51,7 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       backgroundColor: const Color.fromARGB(255, 109, 154, 196),
       body: Center(
         child: Card(

@@ -12,7 +12,7 @@ class SplashScreen extends StatefulWidget {
 class _SplashScreenState extends State<SplashScreen> {
   splashPage() {
     Timer(const Duration(seconds: 5), () {
-      Navigator.pushNamed(context, AppRoutes.login);
+      Navigator.pushReplacementNamed(context, AppRoutes.login);
       // Navigator.pushReplacement(context,
       //     MaterialPageRoute(builder: (context) => const LoginScreen()));
     });
