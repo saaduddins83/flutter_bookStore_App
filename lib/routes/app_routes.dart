@@ -1,4 +1,3 @@
-import 'package:app_book_store/screens/categoryscreen.dart';
 import 'package:app_book_store/screens/categoryscreen1.dart';
 import 'package:app_book_store/screens/signupScreen.dart';
 import 'package:app_book_store/screens/splash_screen.dart';

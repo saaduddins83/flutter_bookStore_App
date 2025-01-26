@@ -1,9 +1,7 @@
 import 'package:app_book_store/providers/cartProvider.dart';
-import 'package:app_book_store/screens/main_screen.dart';
 import 'package:app_book_store/screens/productDetailScreen.dart';
 import 'package:app_book_store/widgets/iconBtnWithCounter.dart';
 import 'package:app_book_store/widgets/icons.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:app_book_store/models/product.dart' as model_product;
 import 'package:app_book_store/widgets/chipsStyle.dart';

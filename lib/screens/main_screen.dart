@@ -6,8 +6,6 @@ import 'package:app_book_store/widgets/iconBtnWithCounter.dart';
 import 'package:app_book_store/widgets/icons.dart';
 import 'package:app_book_store/widgets/productCard.dart';
 import 'package:flutter/material.dart';
-// TODO: add flutter_svg to pubspec.yaml
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:app_book_store/models/product.dart' as model_product;
 import 'package:app_book_store/widgets/chipsStyle.dart';
 import 'package:app_book_store/screens/productDetailScreen.dart';

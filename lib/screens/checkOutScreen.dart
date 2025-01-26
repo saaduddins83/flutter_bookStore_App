@@ -4,7 +4,7 @@ import 'package:app_book_store/models/cart.dart';
 class CheckoutScreen extends StatelessWidget {
   final List<CartItem> cartItems;
 
-  CheckoutScreen({required this.cartItems});
+  const CheckoutScreen({super.key, required this.cartItems});
 
   @override
   Widget build(BuildContext context) {
@@ -68,14 +68,14 @@ class CheckoutScreen extends StatelessWidget {
                         'Discount:',
                         style: TextStyle(
                           fontSize: 16.0,
-                          color: Colors.black.withOpacity(0.7),
+                          color: Colors.black.withValues(alpha: 0.7),
                         ),
                       ),
                       Text(
                         'Rs. 0',
                         style: TextStyle(
                           fontSize: 16.0,
-                          color: Colors.black.withOpacity(0.7),
+                          color: Colors.black.withValues(alpha: 0.7),
                         ),
                       ),
                     ],
@@ -90,14 +90,14 @@ class CheckoutScreen extends StatelessWidget {
                         'Shipping:',
                         style: TextStyle(
                           fontSize: 16.0,
-                          color: Colors.black.withOpacity(0.7),
+                          color: Colors.black.withValues(alpha: 0.7),
                         ),
                       ),
                       Text(
                         'Rs. 50',
                         style: TextStyle(
                           fontSize: 16.0,
-                          color: Colors.black.withOpacity(0.7),
+                          color: Colors.black.withValues(alpha: 0.7),
                         ),
                       ),
                     ],
@@ -158,7 +158,7 @@ class CheckoutScreen extends StatelessWidget {
 class CartItemTile extends StatelessWidget {
   final CartItem cartItem;
 
-  CartItemTile({required this.cartItem});
+  const CartItemTile({super.key, required this.cartItem});
 
   @override
   Widget build(BuildContext context) {
@@ -170,7 +170,8 @@ class CartItemTile extends StatelessWidget {
           color: Colors.white,
           borderRadius: BorderRadius.circular(10.0),
           boxShadow: [
-            BoxShadow(color: Colors.grey.withOpacity(0.2), blurRadius: 8.0)
+            BoxShadow(
+                color: Colors.grey.withValues(alpha: 0.2), blurRadius: 8.0)
           ],
         ),
         child: Row(
@@ -217,7 +218,7 @@ class CartItemTile extends StatelessWidget {
                   'x ${cartItem.quantity}',
                   style: TextStyle(
                     fontSize: 14.0,
-                    color: Colors.black.withOpacity(0.7),
+                    color: Colors.black.withValues(alpha: 0.7),
                   ),
                 ),
                 SizedBox(height: 4.0),

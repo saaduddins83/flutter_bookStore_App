@@ -213,7 +213,7 @@ class ScaltonLine extends StatelessWidget {
     return Container(
       height: height,
       width: width,
-      color: Colors.black.withOpacity(0.08),
+      color: Colors.black.withValues(alpha: 0.08),
     );
   }
 }
@@ -262,7 +262,7 @@ class ScaltonRoundedContainer extends StatelessWidget {
       height: height,
       width: width,
       decoration: BoxDecoration(
-        color: Colors.black.withOpacity(0.08),
+        color: Colors.black.withValues(alpha: 0.08),
         borderRadius: BorderRadius.all(Radius.circular(radious)),
       ),
     );
@@ -315,7 +315,7 @@ class RestaurantInfoBigCard extends StatelessWidget {
                       .textTheme
                       .bodyLarge!
                       .color!
-                      .withOpacity(0.5),
+                      .withValues(alpha: 0.5),
                   BlendMode.srcIn,
                 ),
               ),
@@ -337,7 +337,7 @@ class RestaurantInfoBigCard extends StatelessWidget {
                       .textTheme
                       .bodyLarge!
                       .color!
-                      .withOpacity(0.5),
+                      .withValues(alpha: 0.5),
                   BlendMode.srcIn,
                 ),
               ),
@@ -443,13 +443,13 @@ class RestaurantInfoMediumCard extends StatelessWidget {
                 Text(
                   "$delivertTime min",
                   style: Theme.of(context).textTheme.labelLarge!.copyWith(
-                      color: const Color(0xFF010F07).withOpacity(0.74)),
+                      color: const Color(0xFF010F07).withValues(alpha: 0.74)),
                 ),
                 const SmallDot(),
                 Text(
                   "Free delivery",
                   style: Theme.of(context).textTheme.labelMedium!.copyWith(
-                      color: const Color(0xFF010F07).withOpacity(0.74)),
+                      color: const Color(0xFF010F07).withValues(alpha: 0.74)),
                 )
               ],
             )
@@ -515,7 +515,7 @@ class SectionTitle extends StatelessWidget {
               style: TextStyle(
                 fontSize: 12,
                 fontWeight: FontWeight.w500,
-                color: const Color(0xFF010F07).withOpacity(0.64),
+                color: const Color(0xFF010F07).withValues(alpha: 0.64),
               ),
             ),
           ),
@@ -595,7 +595,7 @@ class DotIndicator extends StatelessWidget {
       height: 5,
       width: 8,
       decoration: BoxDecoration(
-        color: isActive ? activeColor : inActiveColor.withOpacity(0.25),
+        color: isActive ? activeColor : inActiveColor.withValues(alpha: 0.25),
         borderRadius: const BorderRadius.all(Radius.circular(20)),
       ),
     );
@@ -613,7 +613,11 @@ class SmallDot extends StatelessWidget {
       height: 4,
       width: 4,
       decoration: BoxDecoration(
-        color: Theme.of(context).textTheme.bodyLarge!.color!.withOpacity(0.4),
+        color: Theme.of(context)
+            .textTheme
+            .bodyLarge!
+            .color!
+            .withValues(alpha: 0.4),
         shape: BoxShape.circle,
       ),
     );
@@ -661,7 +665,7 @@ class RatingWithCounter extends StatelessWidget {
           style: Theme.of(context)
               .textTheme
               .labelSmall!
-              .copyWith(color: const Color(0xFF010F07).withOpacity(0.74)),
+              .copyWith(color: const Color(0xFF010F07).withValues(alpha: 0.74)),
         ),
         const SizedBox(width: 8),
         SvgPicture.string(
@@ -675,10 +679,8 @@ class RatingWithCounter extends StatelessWidget {
         ),
         const SizedBox(width: 8),
         Text("$numOfRating+ Ratings",
-            style: Theme.of(context)
-                .textTheme
-                .labelSmall!
-                .copyWith(color: const Color(0xFF010F07).withOpacity(0.74))),
+            style: Theme.of(context).textTheme.labelSmall!.copyWith(
+                color: const Color(0xFF010F07).withValues(alpha: 0.74))),
       ],
     );
   }
