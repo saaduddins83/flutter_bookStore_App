@@ -1,8 +1,10 @@
 import 'package:app_book_store/screens/categoryscreen.dart';
+import 'package:app_book_store/screens/categoryscreen1.dart';
 import 'package:app_book_store/screens/signupScreen.dart';
+import 'package:app_book_store/screens/splash_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:app_book_store/screens/loginScreen.dart';
-import 'package:app_book_store/screens/mainScreen.dart';
+import 'package:app_book_store/screens/login_screen.dart';
+import 'package:app_book_store/screens/main_screen.dart';
 import 'package:app_book_store/screens/forgotpasswordScreen.dart';
 import 'package:app_book_store/admin/addBooks.dart';
 import 'package:app_book_store/admin/book_listing.dart';
@@ -10,11 +12,13 @@ import 'package:app_book_store/admin/updateBooks.dart';
 import 'package:app_book_store/admin/userAccounts.dart';
 
 class AppRoutes {
+  static const String splashscreen = '/splashscreen';
   static const String login = '/login';
   static const String main = '/main';
   static const String forgetpassword = '/forgetpassword';
   static const String signup = '/signup';
-  static const String category = '/category';
+  static const String category1 = '/category1';
+
   static const String addbooks = '/addbooks';
   static const String booklisting = '/booklisting';
   static const String updatebooks = '/updatebooks';
@@ -30,12 +34,14 @@ class AppRoutes {
         return MaterialPageRoute(builder: (_) => ForgotpasswordScreen());
       case signup:
         return MaterialPageRoute(builder: (_) => SignupScreen());
-      case category:
-        return MaterialPageRoute(builder: (_) => CategoryScreen());
+      case category1:
+        return MaterialPageRoute(builder: (_) => Categoryscreen1());
       case addbooks:
         return MaterialPageRoute(builder: (_) => AddBookPage());
       case booklisting:
         return MaterialPageRoute(builder: (_) => BookListPage());
+      case splashscreen:
+        return MaterialPageRoute(builder: (_) => SplashScreen());
       case userAccount:
         // Ensure `settings.arguments` contains the required `userId`
         if (settings.arguments != null && settings.arguments is String) {

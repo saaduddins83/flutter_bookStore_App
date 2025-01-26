@@ -1,4 +1,4 @@
-import 'package:app_book_store/screens/mainScreen.dart';
+import 'package:app_book_store/screens/main_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';

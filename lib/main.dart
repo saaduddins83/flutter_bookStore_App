@@ -8,6 +8,7 @@ import 'package:provider/provider.dart';
 import 'package:app_book_store/providers/user_provider.dart';
 import 'package:app_book_store/providers/visibility_provider.dart';
 import 'package:app_book_store/routes/app_routes.dart';
+import 'package:app_book_store/providers/cartProvider.dart';
 // import  'package:app_book_store';
 
 void main() async {
@@ -28,6 +29,7 @@ class Myapp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create: (_) => UserProvider()),
         ChangeNotifierProvider(create: (_) => VisibilityProvider()),
+        ChangeNotifierProvider(create: (_) => CartProvider()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
@@ -36,7 +38,7 @@ class Myapp extends StatelessWidget {
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
           useMaterial3: true,
         ),
-        initialRoute: AppRoutes.userAccount,
+        initialRoute: AppRoutes.main,
         onGenerateRoute: AppRoutes.generateRoute,
         // home: const MyHomePage(),
       ),

@@ -27,7 +27,7 @@ class _LoginScreenState extends State<LoginScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         Snackbar.createSnackBar("Login Successful"),
       );
-      Navigator.pushNamed(context, AppRoutes.category);
+      Navigator.pushNamed(context, AppRoutes.main);
       // Navigator.push(
       //     context, MaterialPageRoute(builder: (context) => const MainScreen()));
     } catch (e) {
@@ -134,45 +134,8 @@ class _LoginScreenState extends State<LoginScreen> {
                   },
                 ),
 
-                TextButton(
-                  onPressed: () {
-                    Navigator.pushNamed(context, AppRoutes.forgetpassword);
-                    // Navigator.push(
-                    //   context,
-                    //   MaterialPageRoute(
-                    //       builder: (context) =>
-                    //           const ForgotpasswordScreen()),
-                    // );
-                  },
-                  style: TextButton.styleFrom(
-                    foregroundColor: Colors.grey, // Text color
-                    textStyle: const TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  child: const Text('Forgot Password?'),
-                ),
-                TextButton(
-                  onPressed: () {
-                    Navigator.pushNamed(context, AppRoutes.signup);
-                    // Navigator.push(
-                    //   context,
-                    //   MaterialPageRoute(
-                    //       builder: (context) => const SignupScreen()),
-                    // );
-                  },
-                  style: TextButton.styleFrom(
-                    foregroundColor: Colors.grey, // Text color
-                    textStyle: const TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  child: const Text('Don\'t have an account? Sign up here'),
-                ),
                 Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
                     const SizedBox(height: 20),
                     SizedBox(
@@ -187,6 +150,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10),
                           ),
+                          padding: const EdgeInsets.symmetric(vertical: 15),
                         ),
                         onPressed: _login,
                         child: const Text(
@@ -198,29 +162,106 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                       ),
                     ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 5.0),
+                      child: TextButton(
+                        onPressed: () {
+                          Navigator.pushNamed(
+                              context, AppRoutes.forgetpassword);
+                          // Navigator.push(
+                          //   context,
+                          //   MaterialPageRoute(
+                          //       builder: (context) =>
+                          //           const ForgotpasswordScreen()),
+                          // );
+                        },
+                        style: TextButton.styleFrom(
+                          foregroundColor: Colors.grey, // Text color
+                          textStyle: const TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        child: const Text('Forgot Password?'),
+                      ),
+                    ),
                   ],
                 ),
-                SizedBox(height: 10),
-                Text(
-                  'Or',
-                  style: TextStyle(
-                    color: Colors.grey,
-                    fontSize: 12,
+
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 10),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Expanded(
+                        child: Divider(
+                          color: Colors.grey,
+                        ),
+                      ),
+                      Container(
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(5),
+                          border: Border.all(
+                            color: Colors.grey,
+                          ),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(3.0),
+                          child: Text(
+                            'OR',
+                            style: TextStyle(
+                              color: Colors.grey,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                        child: Divider(
+                          color: Colors.grey,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-                SizedBox(height: 10),
-                SignInButton(
-                  buttonType: ButtonType.google,
-                  onPressed: () async {
-                    final user = await AuthService().signInWithGoogle(context);
-                    if (user != null) {
-                      // Successfully signed in
-                      print("Signed in as: ${user.displayName}");
-                    } else {
-                      // Sign-in failed or canceled
-                      print("Google Sign-In failed");
-                    }
-                  },
+
+                // Divider with padding ends here
+
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 10),
+                      child: Center(
+                        child: SignInButton(
+                          shape: RoundedRectangleBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(5))),
+                          buttonType: ButtonType.google,
+                          onPressed: () async {
+                            final user =
+                                await AuthService().signInWithGoogle(context);
+                            if (user != null) {
+                              // Successfully signed in
+                              // print("Signed in as: ${user.displayName}");
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                Snackbar.createSnackBar("SignUp Successful"),
+                              );
+                            }
+                          },
+                        ),
+                      ),
+                    ),
+                    Center(
+                      child: TextButton(
+                        onPressed: () {
+                          Navigator.pushNamed(context, AppRoutes.signup);
+                        },
+                        child: const Text('Need An Account? SignUp here'),
+                      ),
+                    ),
+                  ],
                 ),
                 // ElevatedButton(
                 //   onPressed: () async {

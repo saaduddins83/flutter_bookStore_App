@@ -40,6 +40,7 @@ dependencies:
   cached_network_image: ^3.2.3 # For loading images
   flutter_secure_storage: ^9.0.0 # For secure storage
   responsive_framework: ^1.5.1
+  google_fonts: ^5.0.0
   go_router:
   uuid: ^4.5.1
   # firebase_storage: ^12.4.0
