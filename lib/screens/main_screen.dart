@@ -1,6 +1,7 @@
 import 'package:app_book_store/providers/cartProvider.dart';
 import 'package:app_book_store/routes/app_routes.dart';
 import 'package:app_book_store/screens/categoryscreen.dart';
+import 'package:app_book_store/screens/checkOutScreen.dart';
 import 'package:app_book_store/widgets/iconBtnWithCounter.dart';
 import 'package:app_book_store/widgets/icons.dart';
 import 'package:app_book_store/widgets/productCard.dart';
@@ -21,6 +22,7 @@ class MainScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text("Home"),
+        shape: Border(bottom: BorderSide(color: Colors.grey.shade300)),
         leading: Builder(
           builder: (context) => IconButton(
             icon: Icon(Icons.menu),
@@ -37,14 +39,23 @@ class MainScreen extends StatelessWidget {
                   IconBtnWithCounter(
                     svgSrc: cartIcon,
                     numOfitem: cart.numOfItems,
-                    press: () {},
+                    press: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => CheckoutScreen(
+                            cartItems: cart.cartItems,
+                          ),
+                        ),
+                      );
+                    },
                   ),
                   const SizedBox(width: 8),
-                  IconBtnWithCounter(
-                    svgSrc: bellIcon,
-                    // numOfitem: 3, // You can add a different count for bell if necessary
-                    press: () {},
-                  ),
+                  // IconBtnWithCounter(
+                  //   svgSrc: bellIcon,
+                  //   // numOfitem: 3, // You can add a different count for bell if necessary
+                  //   press: () {},
+                  // ),
                 ],
               );
             },

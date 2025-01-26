@@ -1,3 +1,4 @@
+import 'package:app_book_store/models/cart.dart';
 import 'package:flutter/material.dart';
 import 'package:app_book_store/models/product.dart';
 
@@ -25,15 +26,4 @@ class CartProvider with ChangeNotifier {
   int get numOfItems {
     return _cartItems.fold(0, (sum, item) => sum + item.quantity);
   }
-}
-
-// CartItem model that holds the Product and its quantity
-class CartItem {
-  final Product product;
-  int quantity;
-
-  CartItem({
-    required this.product,
-    this.quantity = 1,
-  });
 }

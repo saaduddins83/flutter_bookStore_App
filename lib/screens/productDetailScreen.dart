@@ -1,4 +1,5 @@
 import 'package:app_book_store/providers/cartProvider.dart';
+import 'package:app_book_store/screens/checkOutScreen.dart';
 import 'package:app_book_store/widgets/chipsStyle.dart';
 import 'package:app_book_store/widgets/iconBtnWithCounter.dart';
 import 'package:app_book_store/widgets/icons.dart';
@@ -47,7 +48,16 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                 IconBtnWithCounter(
                   numOfitem: cart.numOfItems,
                   svgSrc: cartIcon,
-                  press: () {},
+                  press: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => CheckoutScreen(
+                          cartItems: cart.cartItems,
+                        ),
+                      ),
+                    );
+                  },
                 ),
               ]);
             },
