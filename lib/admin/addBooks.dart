@@ -18,6 +18,7 @@ class _AddBookPageState extends State<AddBookPage> {
   final TextEditingController _authorController = TextEditingController();
   final TextEditingController _priceController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
+  // final TextEditingController _categoryController = TextEditingController();
 
   void _submitForm() {
     if (_formKey.currentState!.validate()) {
@@ -29,6 +30,7 @@ class _AddBookPageState extends State<AddBookPage> {
         author: _authorController.text,
         price: double.parse(_priceController.text),
         description: _descriptionController.text,
+        // category: _categoryController.text,
       );
 
       // Send book data to backend

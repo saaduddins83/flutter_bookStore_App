@@ -13,6 +13,16 @@ class Book {
     required this.description,
   });
 
+  factory Book.fromJson(Map<String, dynamic> json) {
+    return Book(
+      id: json['id'] ?? '',
+      title: json['title'] ?? '',
+      author: json['author'] ?? '',
+      price: (json['price'] ?? 0).toDouble(),
+      description: json['description'] ?? '',
+    );
+  }
+
   Map<String, dynamic> toJson() {
     return {
       'id': id,
@@ -21,15 +31,5 @@ class Book {
       'price': price,
       'description': description,
     };
-  }
-
-  factory Book.fromJson(Map<String, dynamic> json) {
-    return Book(
-      id: json['id'],
-      title: json['title'],
-      author: json['author'],
-      price: (json['price'] as num).toDouble(),
-      description: json['description'],
-    );
   }
 }

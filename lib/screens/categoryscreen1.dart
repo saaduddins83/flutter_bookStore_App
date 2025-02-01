@@ -1,275 +1,127 @@
-import 'package:app_book_store/providers/cartProvider.dart';
-import 'package:app_book_store/screens/productDetailScreen.dart';
-import 'package:app_book_store/widgets/iconBtnWithCounter.dart';
-import 'package:app_book_store/widgets/icons.dart';
+import 'package:app_book_store/models/product.dart';
 import 'package:flutter/material.dart';
-import 'package:app_book_store/models/product.dart' as model_product;
-import 'package:app_book_store/widgets/chipsStyle.dart';
-import 'package:provider/provider.dart';
+import 'package:app_book_store/models/book.dart';
+import 'package:app_book_store/services/firestore_service.dart';
+import 'package:app_book_store/screens/productDetailScreen.dart';
 
 class Categoryscreen1 extends StatefulWidget {
-  const Categoryscreen1({super.key});
+  // final String category; // Pass the category name as a parameter
 
+  const Categoryscreen1({
+    super.key,
+  });
+// required this.category
   @override
   State<Categoryscreen1> createState() => _Categoryscreen1State();
 }
 
 class _Categoryscreen1State extends State<Categoryscreen1> {
+  final FirestoreService _firestoreService = FirestoreService();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Category Screen"),
-        actions: [
-          Consumer<CartProvider>(
-            builder: (context, cart, child) {
-              return Row(
-                children: [
-                  IconBtnWithCounter(
-                    svgSrc: cartIcon,
-                    numOfitem: cart.numOfItems,
-                    press: () {},
-                  ),
-                  const SizedBox(width: 8),
-                  IconBtnWithCounter(
-                    svgSrc: bellIcon,
-                    // numOfitem: 3, // You can add a different count for bell if necessary
-                    press: () {},
-                  ),
-                  const SizedBox(width: 8),
-                  Builder(
-                    builder: (context) => GestureDetector(
-                      onTap: () {
-                        Scaffold.of(context).openEndDrawer();
-                      },
-                      child: CircleAvatar(
-                        backgroundImage: NetworkImage(
-                          "https://i.postimg.cc/7ZQYv8Vv/Profile-Image.png",
-                        ),
-                        onBackgroundImageError: (_, __) {
-                          // Handle error
-                        },
-                        child: Image.network(
-                          "https://i.postimg.cc/7ZQYv8Vv/Profile-Image.png",
-                          errorBuilder: (context, error, stackTrace) {
-                            return Icon(Icons.person); // Default profile icon
-                          },
-                        ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 8),
-                ],
-              );
-            },
-          ),
-        ],
+        title: Text("Category: "),
       ),
-      endDrawer: Drawer(
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: <Widget>[
-            DrawerHeader(
-              decoration: BoxDecoration(
-                color: Colors.blue,
+      // ${widget.category}
+      body: SafeArea(
+        child: StreamBuilder<List<Book>>(
+          stream: _firestoreService.fetchBooksByCategory(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(child: CircularProgressIndicator());
+            }
+            if (snapshot.hasError) {
+              return Center(child: Text('Error: ${snapshot.error}'));
+            }
+            if (!snapshot.hasData || snapshot.data!.isEmpty) {
+              return const Center(child: Text('No books found.'));
+            }
+
+            final books = snapshot.data!;
+            return SingleChildScrollView(
+              padding: const EdgeInsets.symmetric(vertical: 16),
+              child: Column(
+                children: books.map((book) {
+                  return BookCard(book: book);
+                }).toList(),
               ),
-              child: Text(
-                'Profile',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 24,
-                ),
-              ),
-            ),
-            ListTile(
-              leading: Icon(Icons.account_circle),
-              title: Text('Account'),
-              onTap: () {
-                // Handle account tap
-              },
-            ),
-            ListTile(
-              leading: Icon(Icons.settings),
-              title: Text('Settings'),
-              onTap: () {
-                // Handle settings tap
-              },
-            ),
-            ListTile(
-              leading: Icon(Icons.logout),
-              title: Text('Logout'),
-              onTap: () {
-                // Handle logout tap
-              },
-            ),
-          ],
+            );
+          },
         ),
       ),
-      body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(vertical: 16),
-          child: Column(
+    );
+  }
+}
+
+class BookCard extends StatelessWidget {
+  final Book book;
+
+  const BookCard({super.key, required this.book});
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: () {
+        Navigator.push(context, MaterialPageRoute(builder: (context) => ProductDetailScreen(product: products[])));
+      },
+      child: Card(
+        elevation: 5.0,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10.0),
+        ),
+        child: Container(
+          padding: const EdgeInsets.all(16.0),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const HomeHeader(),
-              const SizedBox(height: 10),
-              BestSellers(products: model_product.products),
+              ClipRRect(
+                borderRadius: BorderRadius.circular(15.0),
+                child: Image.asset('assets/Images/01.jpg',
+                    width: 100, height: 150, fit: BoxFit.cover),
+                // child: Image.network(
+                //   "", // Replace with book image URL
+                //   width: 100.0,
+                //   height: 150.0,
+                //   fit: BoxFit.cover,
+                // ),
+              ),
+              const SizedBox(width: 16.0),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      book.title,
+                      style: const TextStyle(
+                        fontSize: 18.0,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 8.0),
+                    Text(
+                      book.description,
+                      style: const TextStyle(color: Colors.grey),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    const SizedBox(height: 16.0),
+                    Text(
+                      'Rs. ${book.price}',
+                      style: const TextStyle(
+                        fontSize: 16.0,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.green,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             ],
           ),
         ),
       ),
-    );
-  }
-}
-
-class HomeHeader extends StatelessWidget {
-  const HomeHeader({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          const SizedBox(width: 16),
-          const Expanded(child: SearchField()),
-          const SizedBox(width: 16),
-        ],
-      ),
-    );
-  }
-}
-
-class SearchField extends StatelessWidget {
-  const SearchField({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Form(
-      child: TextFormField(
-        onChanged: (value) {},
-        decoration: InputDecoration(
-          filled: true,
-          hintStyle: const TextStyle(color: Color(0xFF757575)),
-          fillColor: Color.fromRGBO(151, 151, 151, 0.1),
-          contentPadding:
-              const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-          border: const OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(12)),
-            borderSide: BorderSide.none,
-          ),
-          focusedBorder: const OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(12)),
-            borderSide: BorderSide.none,
-          ),
-          enabledBorder: const OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(12)),
-            borderSide: BorderSide.none,
-          ),
-          hintText: "Search product",
-          prefixIcon: const Icon(Icons.search),
-        ),
-      ),
-    );
-  }
-}
-
-class BestSellers extends StatelessWidget {
-  final List<model_product.Product> products;
-
-  const BestSellers({Key? key, required this.products}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: products.map((product) {
-        return GestureDetector(
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => ProductDetailScreen(product: product),
-              ),
-            );
-          },
-          child: Card(
-            elevation: 5.0,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10.0),
-            ),
-            child: Container(
-              padding: EdgeInsets.all(16.0),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(8.0),
-                    child: Image.network(
-                      product.images[0],
-                      width: 100.0,
-                      height: 150.0,
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                  SizedBox(width: 16.0),
-                  Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.all(10.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            product.title,
-                            style: TextStyle(
-                              fontSize: 18.0,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          SizedBox(height: 8.0),
-                          Text(
-                            product.description,
-                            style: TextStyle(
-                              color: Colors.grey,
-                            ),
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                          SizedBox(height: 16.0),
-                          Wrap(
-                            spacing: 8.0,
-                            runSpacing: 4.0,
-                            children: product.categories.map((category) {
-                              return Chip(
-                                label: Text(
-                                  category,
-                                  style: getCategoryTextStyle(category),
-                                ),
-                                backgroundColor:
-                                    getCategoryBackgroundColor(category),
-                                labelPadding:
-                                    EdgeInsets.symmetric(horizontal: 8.0),
-                              );
-                            }).toList(),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  Text(
-                    'Rs. ${product.price}',
-                    style: TextStyle(
-                      fontSize: 18.0,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        );
-      }).toList(),
     );
   }
 }

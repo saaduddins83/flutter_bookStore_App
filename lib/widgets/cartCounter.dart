@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class CartCounter extends StatefulWidget {
-  const CartCounter({Key? key}) : super(key: key);
+  const CartCounter({super.key});
 
   @override
   State<CartCounter> createState() => _CartCounterState();

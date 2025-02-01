@@ -17,11 +17,12 @@ class AppRoutes {
   static const String forgetpassword = '/forgetpassword';
   static const String signup = '/signup';
   static const String category1 = '/category1';
-
+  
   static const String addbooks = '/addbooks';
   static const String booklisting = '/booklisting';
   static const String updatebooks = '/updatebooks';
   static const String userAccount = '/userAccounts';
+  
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {

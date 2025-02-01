@@ -1,18 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:app_book_store/models/cart.dart';
 
-class CheckoutScreen extends StatelessWidget {
+class CheckoutScreen extends StatefulWidget {
   final List<CartItem> cartItems;
 
   const CheckoutScreen({super.key, required this.cartItems});
 
   @override
-  Widget build(BuildContext context) {
-    double totalAmount = 0;
-    cartItems.forEach((cartItem) {
-      totalAmount += cartItem.product.price * cartItem.quantity;
-    });
+  State<CheckoutScreen> createState() => _CheckoutScreenState();
+}
 
+class _CheckoutScreenState extends State<CheckoutScreen> {
+  double calculateTotalAmount() {
+    double total = 0;
+    for (var cartItem in widget.cartItems) {
+      total += cartItem.product.price * cartItem.quantity;
+    }
+    return total;
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('Checkout'),
@@ -26,9 +34,16 @@ class CheckoutScreen extends StatelessWidget {
           children: [
             Expanded(
               child: ListView.builder(
-                itemCount: cartItems.length,
+                itemCount: widget.cartItems.length,
                 itemBuilder: (context, index) {
-                  return CartItemTile(cartItem: cartItems[index]);
+                  return CartItemTile(
+                    cartItem: widget.cartItems[index],
+                    onQuantityChanged: (newQuantity) {
+                      setState(() {
+                        widget.cartItems[index].quantity = newQuantity;
+                      });
+                    },
+                  );
                 },
               ),
             ),
@@ -50,7 +65,7 @@ class CheckoutScreen extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        'Rs. $totalAmount',
+                        'Rs. ${calculateTotalAmount()}',
                         style: TextStyle(
                           fontSize: 18.0,
                           fontWeight: FontWeight.w500,
@@ -59,29 +74,6 @@ class CheckoutScreen extends StatelessWidget {
                       ),
                     ],
                   ),
-
-                  SizedBox(height: 8.0),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'Discount:',
-                        style: TextStyle(
-                          fontSize: 16.0,
-                          color: Colors.black.withValues(alpha: 0.7),
-                        ),
-                      ),
-                      Text(
-                        'Rs. 0',
-                        style: TextStyle(
-                          fontSize: 16.0,
-                          color: Colors.black.withValues(alpha: 0.7),
-                        ),
-                      ),
-                    ],
-                  ),
-
-                  // Shipping
                   SizedBox(height: 8.0),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -90,22 +82,20 @@ class CheckoutScreen extends StatelessWidget {
                         'Shipping:',
                         style: TextStyle(
                           fontSize: 16.0,
-                          color: Colors.black.withValues(alpha: 0.7),
+                          color: Colors.grey[600],
                         ),
                       ),
                       Text(
                         'Rs. 50',
                         style: TextStyle(
                           fontSize: 16.0,
-                          color: Colors.black.withValues(alpha: 0.7),
+                          color: Colors.grey[600],
                         ),
                       ),
                     ],
                   ),
-
                   SizedBox(height: 16.0),
                   Divider(),
-
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -118,7 +108,7 @@ class CheckoutScreen extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        'Rs. ${totalAmount + 50}',
+                        'Rs. ${calculateTotalAmount() + 50}',
                         style: TextStyle(
                           fontSize: 20.0,
                           fontWeight: FontWeight.bold,
@@ -141,8 +131,7 @@ class CheckoutScreen extends StatelessWidget {
                     textStyle: TextStyle(fontSize: 18),
                   ),
                   onPressed: () {
-                    // final confirmation page lagana hy
-                    // Navigator.push(context, MaterialPageRoute(...));
+                    // Navigate to confirmation page
                   },
                   child: Text('Proceed to Payment'),
                 ),
@@ -157,8 +146,13 @@ class CheckoutScreen extends StatelessWidget {
 
 class CartItemTile extends StatelessWidget {
   final CartItem cartItem;
-
-  const CartItemTile({super.key, required this.cartItem});
+  final Function(int) onQuantityChanged;
+  // final VoidCallback onpress;
+  const CartItemTile({
+    super.key,
+    required this.cartItem,
+    required this.onQuantityChanged,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -170,8 +164,7 @@ class CartItemTile extends StatelessWidget {
           color: Colors.white,
           borderRadius: BorderRadius.circular(10.0),
           boxShadow: [
-            BoxShadow(
-                color: Colors.grey.withValues(alpha: 0.2), blurRadius: 8.0)
+            BoxShadow(color: Colors.grey.withOpacity(0.2), blurRadius: 8.0)
           ],
         ),
         child: Row(
@@ -208,20 +201,32 @@ class CartItemTile extends StatelessWidget {
                       color: Colors.grey[600],
                     ),
                   ),
+                  SizedBox(height: 8.0),
+                  Row(
+                    children: [
+                      IconButton(
+                        icon: Icon(Icons.remove),
+                        onPressed: cartItem.quantity >= 1
+                            ? () => onQuantityChanged(cartItem.quantity - 1)
+                            : null,
+                      ),
+                      Text(
+                        '${cartItem.quantity}',
+                        style: TextStyle(fontSize: 16.0),
+                      ),
+                      IconButton(
+                        icon: Icon(Icons.add),
+                        onPressed: () =>
+                            onQuantityChanged(cartItem.quantity + 1),
+                      ),
+                    ],
+                  ),
                 ],
               ),
             ),
             Column(
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
-                Text(
-                  'x ${cartItem.quantity}',
-                  style: TextStyle(
-                    fontSize: 14.0,
-                    color: Colors.black.withValues(alpha: 0.7),
-                  ),
-                ),
-                SizedBox(height: 4.0),
                 Text(
                   'Rs. ${cartItem.product.price * cartItem.quantity}',
                   style: TextStyle(
