@@ -1,4 +1,3 @@
-// import 'package:app_book_store/services/firestore_service.dart';
 class Product {
   final int id;
   final String title, description;
@@ -152,39 +151,3 @@ List<Product> products = [
     price: 1550.0,
   ),
 ];
-// class Product {
-//   final int id;
-//   final String title, description;
-//   final List<String> images;
-//   final List<String> categories;
-//   final bool isFavourite, isPopular;
-//   final double price;
-//   final double rating;
-
-//   Product({
-//     required this.id,
-//     required this.images,
-//     this.rating = 0.0,
-//     this.isFavourite = false,
-//     this.isPopular = false,
-//     required this.title,
-//     required this.price,
-//     required this.description,
-//     required this.categories,
-//   });
-
-  // fromFirestore method to convert Firestore data to Product object
-  // factory roduct.fromFirestore(Map<String, dynamic> doc, String id) {
-  //   return Product(
-  //     id: int.parse(id), // Assuming `id` is a string in Firestore
-  //     title: doc['title'] ?? '',
-  //     description: doc['description'] ?? '',
-  //     images: List<String>.from(doc['images'] ?? []),
-  //     categories: List<String>.from(doc['categories'] ?? []),
-  //     price: doc['price']?.toDouble() ?? 0.0,
-  //     rating: doc['rating']?.toDouble() ?? 0.0,
-  //     isFavourite: doc['isFavourite'] ?? false,
-  //     isPopular: doc['isPopular'] ?? false,
-  //   );
-  // }
-

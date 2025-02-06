@@ -6,12 +6,12 @@ class CartProvider with ChangeNotifier {
   final List<CartItem> _cartItems = [];
 
   List<CartItem> get cartItems => _cartItems;
-            
+
   void addToCart(Product product, int quantity) {
     final existingItemIndex =
         _cartItems.indexWhere((cartItem) => cartItem.product.id == product.id);
 
-    if (existingItemIndex >= 1) {
+    if (existingItemIndex >= 0) {
       _cartItems[existingItemIndex].quantity += quantity;
     } else {
       _cartItems.add(CartItem(product: product, quantity: quantity));

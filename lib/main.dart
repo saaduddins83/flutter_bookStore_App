@@ -33,12 +33,12 @@ class Myapp extends StatelessWidget {
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        title: 'Book store app',
+        title: 'Flutter Demo',
         theme: ThemeData(
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
           useMaterial3: true,
         ),
-        initialRoute: AppRoutes.main,
+        initialRoute: AppRoutes.login,
         onGenerateRoute: AppRoutes.generateRoute,
         // home: const MyHomePage(),
       ),

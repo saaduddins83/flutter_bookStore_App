@@ -10,21 +10,4 @@ class UserModel {
     id = json['uid'];
     email = json['email'];
   }
-//Method to convert Firestore Document to model
-  factory UserModel.fromFirestore(
-      Map<String, dynamic> data, String documentId) {
-    return UserModel(
-      id: documentId,
-      username: data['username'] ?? '',
-      email: data['email'] ?? '',
-    );
-  }
-
-  //Method to convert model to Firestore Document
-  Map<String, dynamic> toFirestore() {
-    return {
-      'username': username,
-      'email': email,
-    };
-  }
 }

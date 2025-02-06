@@ -10,48 +10,11 @@ import 'package:app_book_store/models/product.dart' as model_product;
 import 'package:app_book_store/widgets/chipsStyle.dart';
 import 'package:app_book_store/screens/productDetailScreen.dart';
 import 'package:provider/provider.dart';
-// import 'package:app_book_store/screens/categoryscreen1.dart';
 
-class MainScreen extends StatefulWidget {
+class MainScreen extends StatelessWidget {
   // static String routeName = "/home";
 
   const MainScreen({super.key});
-
-  @override
-  State<MainScreen> createState() => _MainScreenState();
-}
-
-class _MainScreenState extends State<MainScreen> {
-  bool _isLoading = false;
-
-  Future<void> _handleLogout() async {
-    setState(() {
-      _isLoading = true;
-
-      // Navigate to Splash Screen after logout
-    });
-    try {
-      // Simulate logout process (e.g., clearing session, contacting API)
-      await Future.delayed(const Duration(seconds: 2)); // Simulating delay
-      //         WidgetsBinding.instance.addPostFrameCallback((_) {
-
-      // Navigate to SplashScreen after logout
-      Navigator.of(context).pushNamedAndRemoveUntil(
-        AppRoutes.splashscreen, // Replace with your actual splash screen route
-        (Route<dynamic> route) => false,
-      );
-    } catch (error) {
-      // Handle errors if any
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Logout failed: ${error.toString()}')),
-      );
-    } finally {
-      setState(() {
-        _isLoading = false;
-      });
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -128,12 +91,10 @@ class _MainScreenState extends State<MainScreen> {
               },
             ),
             ListTile(
-              leading: const Icon(Icons.logout),
-              title: const Text('Logout'),
-              onTap: () async {
-                if (_isLoading) return;
-
-                await _handleLogout();
+              leading: Icon(Icons.logout),
+              title: Text('Logout'),
+              onTap: () {
+                // Handle logout tap
               },
             ),
           ],
@@ -357,7 +318,7 @@ class PopularProducts extends StatelessWidget {
 class BestSellers extends StatelessWidget {
   final List<model_product.Product> products;
 
-  const BestSellers({super.key, required this.products});
+  const BestSellers({Key? key, required this.products}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -378,7 +339,7 @@ class BestSellers extends StatelessWidget {
               borderRadius: BorderRadius.circular(10.0),
             ),
             child: Container(
-              // padding: EdgeInsets.all(25.0),
+              padding: EdgeInsets.all(16.0),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
@@ -467,7 +428,7 @@ class RecentlyAddedProducts extends StatelessWidget {
           ),
         ),
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 45),
+          padding: const EdgeInsets.symmetric(horizontal: 16),
           child: GridView.builder(
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
