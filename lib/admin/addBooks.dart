@@ -1,3 +1,4 @@
+import 'package:app_book_store/models/product.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:app_book_store/models/book.dart';
@@ -15,33 +16,39 @@ class _AddBookPageState extends State<AddBookPage> {
   final Uuid uuid = Uuid();
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _titleController = TextEditingController();
-  final TextEditingController _authorController = TextEditingController();
+  final TextEditingController _imageController = TextEditingController();
   final TextEditingController _priceController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
+  final TextEditingController _ratingController = TextEditingController();
 
   void _submitForm() {
     if (_formKey.currentState!.validate()) {
       final String bookId = uuid.v4();
       // Collect book data
-      final book = Book(
+      final product = Product(
         id: bookId, // Generate a unique ID
         title: _titleController.text,
-        author: _authorController.text,
+        categories: ['Technology', 'Design'],
+        images: [_imageController.text],
+        rating: double.parse(_ratingController.text),
         price: double.parse(_priceController.text),
         description: _descriptionController.text,
       );
 
       // Send book data to backend
-      addBookToBackend(book);
+      addBookToBackend(product);
     }
   }
 
-  Future<void> addBookToBackend(Book book) async {
+  Future<void> addBookToBackend(Product product) async {
     try {
       final firestore = FirebaseFirestore.instance;
 
       // Use book.id as the document ID
-      await firestore.collection('books').doc(book.id).set(book.toJson());
+      await firestore
+          .collection('products')
+          .doc(product.id)
+          .set(product.toJson());
 
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Book added successfully!')),
@@ -49,7 +56,8 @@ class _AddBookPageState extends State<AddBookPage> {
 
       // Clear form fields after successful submission
       _titleController.clear();
-      _authorController.clear();
+      _imageController.clear();
+      _ratingController.clear();
       _priceController.clear();
       _descriptionController.clear();
     } catch (error) {
@@ -89,16 +97,27 @@ class _AddBookPageState extends State<AddBookPage> {
 
                 // Author Field
                 _buildTextField(
-                  controller: _authorController,
-                  label: 'Author',
+                  controller: _imageController,
+                  label: 'Image URL',
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Please enter the author';
+                      return 'Please enter Image URL';
                     }
                     return null;
                   },
                 ),
 
+                // Author Field
+                _buildTextField(
+                  controller: _ratingController,
+                  label: 'Rating',
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter rating';
+                    }
+                    return null;
+                  },
+                ),
                 // Price Field
                 _buildTextField(
                   controller: _priceController,

@@ -1,4 +1,4 @@
-import 'package:app_book_store/screens/categoryscreen1.dart';
+import 'package:app_book_store/screens/categoryscreen.dart';
 import 'package:app_book_store/screens/signupScreen.dart';
 import 'package:app_book_store/screens/splash_screen.dart';
 import 'package:flutter/material.dart';
@@ -34,7 +34,12 @@ class AppRoutes {
       case signup:
         return MaterialPageRoute(builder: (_) => SignupScreen());
       case category1:
-        return MaterialPageRoute(builder: (_) => Categoryscreen1());
+        final searchQuery = settings.arguments as String?;
+
+        return MaterialPageRoute(
+            builder: (_) => Categoryscreen(
+                  searchQuery: searchQuery,
+                ));
       case addbooks:
         return MaterialPageRoute(builder: (_) => AddBookPage());
       case booklisting:

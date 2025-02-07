@@ -1,4 +1,5 @@
 // import 'package:app_book_store/screens/login.dart';
+import 'package:app_book_store/providers/productsProvider.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
@@ -30,6 +31,7 @@ class Myapp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => UserProvider()),
         ChangeNotifierProvider(create: (_) => VisibilityProvider()),
         ChangeNotifierProvider(create: (_) => CartProvider()),
+        ChangeNotifierProvider(create: (_) => Productsprovider()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
@@ -38,7 +40,7 @@ class Myapp extends StatelessWidget {
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
           useMaterial3: true,
         ),
-        initialRoute: AppRoutes.login,
+        initialRoute: AppRoutes.main,
         onGenerateRoute: AppRoutes.generateRoute,
         // home: const MyHomePage(),
       ),

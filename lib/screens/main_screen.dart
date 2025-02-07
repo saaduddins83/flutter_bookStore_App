@@ -1,20 +1,36 @@
 import 'package:app_book_store/providers/cartProvider.dart';
+import 'package:app_book_store/providers/productsProvider.dart';
 import 'package:app_book_store/routes/app_routes.dart';
 import 'package:app_book_store/screens/checkOutScreen.dart';
 import 'package:app_book_store/widgets/bigCardImageSlide.dart';
 import 'package:app_book_store/widgets/iconBtnWithCounter.dart';
 import 'package:app_book_store/widgets/icons.dart';
 import 'package:app_book_store/widgets/productCard.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:app_book_store/models/product.dart' as model_product;
 import 'package:app_book_store/widgets/chipsStyle.dart';
 import 'package:app_book_store/screens/productDetailScreen.dart';
 import 'package:provider/provider.dart';
 
-class MainScreen extends StatelessWidget {
+class MainScreen extends StatefulWidget {
   // static String routeName = "/home";
 
   const MainScreen({super.key});
+
+  @override
+  State<MainScreen> createState() => _MainScreenState();
+}
+
+class _MainScreenState extends State<MainScreen> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    Provider.of<Productsprovider>(context, listen: false).fetchProducts();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -101,32 +117,44 @@ class MainScreen extends StatelessWidget {
         ),
       ),
       body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(vertical: 16),
-          child: Column(
-            children: [
-              const HomeHeader(),
-              const DiscountBanner(),
-              const Padding(
-                padding: EdgeInsets.all(15.0),
-                child: BigCardImageSlide(images: [
-                  "https://i.postimg.cc/3kLKCFGr/02.jpg",
-                  "https://i.postimg.cc/Yv2rWshy/03.jpg",
-                  "https://i.postimg.cc/tntb13yj/07.jpg",
-                  "https://i.postimg.cc/jDkbJdVL/08.jpg",
-                  "https://i.postimg.cc/MM1247nQ/09.jpg",
-                ]),
-              ),
-              const SizedBox(height: 20),
-              const PopularProducts(),
-              const SizedBox(height: 20),
-              const RecentlyAddedProducts(),
-              const SizedBox(height: 20),
-              BestSellers(products: model_product.products.sublist(0, 3)),
-              const SizedBox(height: 20),
-            ],
-          ),
-        ),
+        child:
+            Consumer<Productsprovider>(builder: (context, productsprovider, _) {
+          return productsprovider.isloading
+              ? Center(
+                  child: CircularProgressIndicator(),
+                )
+              : SingleChildScrollView(
+                  padding: const EdgeInsets.symmetric(vertical: 16),
+                  child: Column(
+                    children: [
+                      const HomeHeader(),
+                      const DiscountBanner(),
+                      const Padding(
+                        padding: EdgeInsets.all(15.0),
+                        child: BigCardImageSlide(images: [
+                          "https://i.postimg.cc/3kLKCFGr/02.jpg",
+                          "https://i.postimg.cc/Yv2rWshy/03.jpg",
+                          "https://i.postimg.cc/tntb13yj/07.jpg",
+                          "https://i.postimg.cc/jDkbJdVL/08.jpg",
+                          "https://i.postimg.cc/MM1247nQ/09.jpg",
+                        ]),
+                      ),
+                      const SizedBox(height: 20),
+                      const PopularProducts(),
+                      const SizedBox(height: 20),
+                      const RecentlyAddedProducts(),
+                      const SizedBox(height: 20),
+                      BestSellers(
+                          products: productsprovider.products.sublist(
+                              0,
+                              productsprovider.products.length > 3
+                                  ? 3
+                                  : productsprovider.products.length)),
+                      const SizedBox(height: 20),
+                    ],
+                  ),
+                );
+        }),
       ),
     );
   }
@@ -153,14 +181,33 @@ class HomeHeader extends StatelessWidget {
   }
 }
 
-class SearchField extends StatelessWidget {
+class SearchField extends StatefulWidget {
   const SearchField({super.key});
+
+  @override
+  State<SearchField> createState() => _SearchFieldState();
+}
+
+class _SearchFieldState extends State<SearchField> {
+  final TextEditingController _searchController = TextEditingController();
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Form(
       child: TextFormField(
         onChanged: (value) {},
+        onEditingComplete: () {
+          if (_searchController.text.trim().isEmpty) return;
+          Navigator.pushNamed(context, AppRoutes.category1,
+              arguments: _searchController.text.trim());
+        },
+        controller: _searchController,
         decoration: InputDecoration(
           filled: true,
           hintStyle: const TextStyle(color: Color(0xFF757575)),
@@ -277,6 +324,9 @@ class PopularProducts extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final productsprovider =
+        Provider.of<Productsprovider>(context, listen: false);
+
     return Column(
       children: [
         Padding(
@@ -290,18 +340,24 @@ class PopularProducts extends StatelessWidget {
           height: 250,
           child: ListView.builder(
             scrollDirection: Axis.horizontal,
-            itemCount: model_product.products.sublist(0, 6).length,
+            itemCount: productsprovider.products
+                .sublist(
+                    0,
+                    productsprovider.products.length > 6
+                        ? 6
+                        : productsprovider.products.length)
+                .length,
             itemBuilder: (context, index) {
               return Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8),
                 child: ProductCard(
-                  product: model_product.products[index],
+                  product: productsprovider.products[index],
                   onPress: () {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
                         builder: (context) => ProductDetailScreen(
-                            product: model_product.products[index]),
+                            product: productsprovider.products[index]),
                       ),
                     );
                   },
@@ -418,6 +474,8 @@ class RecentlyAddedProducts extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final productsprovider =
+        Provider.of<Productsprovider>(context, listen: false);
     return Column(
       children: [
         Padding(
@@ -432,7 +490,13 @@ class RecentlyAddedProducts extends StatelessWidget {
           child: GridView.builder(
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
-            itemCount: model_product.products.sublist(8, 12).length,
+            itemCount: productsprovider.products
+                .sublist(
+                    0,
+                    productsprovider.products.length > 12
+                        ? 12
+                        : productsprovider.products.length)
+                .length,
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2,
               crossAxisSpacing: 16,
@@ -441,13 +505,13 @@ class RecentlyAddedProducts extends StatelessWidget {
             ),
             itemBuilder: (context, index) {
               return ProductCard(
-                product: model_product.products[index],
+                product: productsprovider.products[index],
                 onPress: () {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
                       builder: (context) => ProductDetailScreen(
-                          product: model_product.products[index]),
+                          product: productsprovider.products[index]),
                     ),
                   );
                 },

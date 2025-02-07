@@ -25,7 +25,6 @@ class _BigCardImageSlideState extends State<BigCardImageSlide> {
 
   timer() {
     Future.delayed(const Duration(seconds: 2), () {
-      print(pageController.page!.toInt());
       if (pageController.page!.toInt() < widget.images.length - 1) {
         pageController.animateToPage(pageController.page!.toInt() + 1,
             duration: Duration(milliseconds: 800), curve: Curves.easeIn);
