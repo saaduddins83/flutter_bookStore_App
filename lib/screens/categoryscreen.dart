@@ -1,4 +1,5 @@
 import 'package:app_book_store/providers/cartProvider.dart';
+import 'package:app_book_store/providers/productsProvider.dart';
 import 'package:app_book_store/screens/productDetailScreen.dart';
 import 'package:app_book_store/widgets/iconBtnWithCounter.dart';
 import 'package:app_book_store/widgets/icons.dart';
@@ -17,6 +18,13 @@ class Categoryscreen extends StatefulWidget {
 
 class _CategoryscreenState extends State<Categoryscreen> {
   List<model_product.Product> filteredProducts = model_product.products;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    filteredProducts = Provider.of<Productsprovider>(context).products;
+  }
+
   @override
   void initState() {
     // TODO: implement initState
@@ -27,8 +35,11 @@ class _CategoryscreenState extends State<Categoryscreen> {
     }
   }
 
-  void updateSearchQuery(String query, {shouldNotify = true}) {
-    filteredProducts = model_product.products.where((product) {
+  void updateSearchQuery(String query, {bool shouldNotify = true}) {
+    final allProducts =
+        Provider.of<Productsprovider>(context, listen: false).products;
+
+    filteredProducts = allProducts.where((product) {
       final titleLower = product.title.toLowerCase();
       final categoriesLower = product.categories.join(' ').toLowerCase();
       final priceString = product.price.toString();
@@ -38,8 +49,10 @@ class _CategoryscreenState extends State<Categoryscreen> {
           categoriesLower.contains(searchLower) ||
           priceString.contains(searchLower);
     }).toList();
-    if (!shouldNotify) return;
-    setState(() {});
+
+    if (shouldNotify) {
+      setState(() {}); // Ensure this is needed only when the UI should change
+    }
   }
 
   @override
