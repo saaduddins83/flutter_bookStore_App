@@ -2,11 +2,13 @@ import 'package:app_book_store/providers/cartProvider.dart';
 import 'package:app_book_store/providers/productsProvider.dart';
 import 'package:app_book_store/routes/app_routes.dart';
 import 'package:app_book_store/screens/checkOutScreen.dart';
+import 'package:app_book_store/services/auth_services.dart';
 import 'package:app_book_store/widgets/bigCardImageSlide.dart';
 import 'package:app_book_store/widgets/iconBtnWithCounter.dart';
 import 'package:app_book_store/widgets/icons.dart';
 import 'package:app_book_store/widgets/productCard.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:app_book_store/models/product.dart' as model_product;
 import 'package:app_book_store/widgets/chipsStyle.dart';
@@ -23,12 +25,15 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
+  late AuthService _authService;
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
 
     Provider.of<Productsprovider>(context, listen: false).fetchProducts();
+    _authService = AuthService();
   }
 
   @override
@@ -93,24 +98,26 @@ class _MainScreenState extends State<MainScreen> {
               ),
             ),
             ListTile(
-              leading: Icon(Icons.account_circle),
-              title: Text('Account'),
-              onTap: () {
-                // Handle account tap
-              },
-            ),
-            ListTile(
               leading: Icon(Icons.settings),
-              title: Text('Settings'),
+              title: Text('Order History'),
               onTap: () {
-                // Handle settings tap
+                Navigator.pushNamed(context, AppRoutes.orderHistoryScreen);
               },
             ),
             ListTile(
               leading: Icon(Icons.logout),
               title: Text('Logout'),
               onTap: () {
-                // Handle logout tap
+                User? currentUser = FirebaseAuth.instance.currentUser;
+                if (currentUser != null) {
+                  // Proceed with logout
+                  _authService.logout(context);
+                } else {
+                  // User is already logged out, display a message or handle accordingly
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('User is already logged out!')),
+                  );
+                }
               },
             ),
           ],
@@ -493,8 +500,8 @@ class RecentlyAddedProducts extends StatelessWidget {
             itemCount: productsprovider.products
                 .sublist(
                     0,
-                    productsprovider.products.length > 12
-                        ? 12
+                    productsprovider.products.length > 4
+                        ? 4
                         : productsprovider.products.length)
                 .length,
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(

@@ -1,6 +1,8 @@
 import 'package:app_book_store/providers/cartProvider.dart';
 import 'package:app_book_store/providers/productsProvider.dart';
+import 'package:app_book_store/routes/app_routes.dart';
 import 'package:app_book_store/screens/productDetailScreen.dart';
+import 'package:app_book_store/services/auth_services.dart';
 import 'package:app_book_store/widgets/iconBtnWithCounter.dart';
 import 'package:app_book_store/widgets/icons.dart';
 import 'package:flutter/material.dart';
@@ -51,12 +53,14 @@ class _CategoryscreenState extends State<Categoryscreen> {
     }).toList();
 
     if (shouldNotify) {
-      setState(() {}); // Ensure this is needed only when the UI should change
+      setState(() {});
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    final AuthService _authService = AuthService();
+
     return Scaffold(
       appBar: AppBar(
         title: Text("Category Screen"),
@@ -122,24 +126,17 @@ class _CategoryscreenState extends State<Categoryscreen> {
               ),
             ),
             ListTile(
-              leading: Icon(Icons.account_circle),
-              title: Text('Account'),
-              onTap: () {
-                // Handle account tap
-              },
-            ),
-            ListTile(
               leading: Icon(Icons.settings),
-              title: Text('Settings'),
+              title: Text('Order History'),
               onTap: () {
-                // Handle settings tap
+                Navigator.pushNamed(context, AppRoutes.orderHistoryScreen);
               },
             ),
             ListTile(
               leading: Icon(Icons.logout),
               title: Text('Logout'),
               onTap: () {
-                // Handle logout tap
+                _authService.logout(context);
               },
             ),
           ],

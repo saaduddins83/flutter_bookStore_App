@@ -1,4 +1,5 @@
 // import 'package:app_book_store/screens/login.dart';
+import 'package:app_book_store/providers/orderProvider.dart';
 import 'package:app_book_store/providers/productsProvider.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -23,7 +24,6 @@ void main() async {
 class Myapp extends StatelessWidget {
   const Myapp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
@@ -32,17 +32,18 @@ class Myapp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => VisibilityProvider()),
         ChangeNotifierProvider(create: (_) => CartProvider()),
         ChangeNotifierProvider(create: (_) => Productsprovider()),
+        ChangeNotifierProvider(create: (context) => OrderProvider()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        title: 'Flutter Demo',
+        title: 'Book Store App',
         theme: ThemeData(
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
           useMaterial3: true,
         ),
-        initialRoute: AppRoutes.main,
+        initialRoute: AppRoutes.splashscreen,
         onGenerateRoute: AppRoutes.generateRoute,
-        // home: const MyHomePage(),
+        home: AuthWrapper(),
       ),
     );
   }

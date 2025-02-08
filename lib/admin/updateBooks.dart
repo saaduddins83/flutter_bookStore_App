@@ -1,3 +1,4 @@
+import 'package:app_book_store/admin/floatingActionButton.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -125,6 +126,7 @@ class _UpdateBooksState extends State<UpdateBooks> {
           ),
         ),
       ),
+      floatingActionButton: NavigationFAB(),
     );
   }
 }

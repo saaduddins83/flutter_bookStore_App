@@ -49,4 +49,23 @@ class AuthService {
       return null;
     }
   }
+
+  Future<void> logout(BuildContext context) async {
+    try {
+      // First, sign out from Google
+      await _googleSignIn.signOut();
+      print('Google sign-out successful');
+
+      // Then, sign out from Firebase
+      await FirebaseAuth.instance.signOut();
+      print('Firebase sign-out successful');
+
+      // Navigate to the login screen
+      Navigator.pushReplacementNamed(context, '/login');
+    } catch (e) {
+      print("Error during sign-out: $e");
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Logout failed: ${e.toString()}')));
+    }
+  }
 }

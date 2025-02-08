@@ -36,9 +36,8 @@ class _LoginScreenState extends State<LoginScreen> {
       final bool? isadmin = userjson["admin"];
 
       Navigator.pushReplacementNamed(
-        context, isadmin == true ? AppRoutes.booklisting : AppRoutes.main,
-        //arguments: user.user!.uid
-      );
+          context, isadmin == true ? AppRoutes.addbooks : AppRoutes.main,
+          arguments: user.user!.uid);
       // Navigator.push(
       //     context, MaterialPageRoute(builder: (context) => const MainScreen()));
     } catch (e) {

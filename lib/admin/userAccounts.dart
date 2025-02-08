@@ -1,3 +1,4 @@
+import 'package:app_book_store/admin/floatingActionButton.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:app_book_store/models/user_model.dart';
@@ -78,6 +79,7 @@ class UserAccountPage extends StatelessWidget {
           );
         },
       ),
+      floatingActionButton: NavigationFAB(),
     );
   }
 }

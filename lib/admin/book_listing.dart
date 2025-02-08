@@ -1,3 +1,4 @@
+import 'package:app_book_store/admin/floatingActionButton.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:app_book_store/routes/app_routes.dart';
@@ -165,6 +166,7 @@ class _BookListPageState extends State<BookListPage> {
           );
         },
       ),
+      floatingActionButton: NavigationFAB(),
     );
   }
 }

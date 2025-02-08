@@ -1,6 +1,8 @@
 import 'package:app_book_store/screens/categoryscreen.dart';
+import 'package:app_book_store/screens/orderhistoryscreen.dart';
 import 'package:app_book_store/screens/signupScreen.dart';
 import 'package:app_book_store/screens/splash_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:app_book_store/screens/login_screen.dart';
 import 'package:app_book_store/screens/main_screen.dart';
@@ -17,6 +19,7 @@ class AppRoutes {
   static const String forgetpassword = '/forgetpassword';
   static const String signup = '/signup';
   static const String category1 = '/category1';
+  static const String orderHistoryScreen = '/OrderHistoryScreen';
 
   static const String addbooks = '/addbooks';
   static const String booklisting = '/booklisting';
@@ -33,6 +36,8 @@ class AppRoutes {
         return MaterialPageRoute(builder: (_) => ForgotpasswordScreen());
       case signup:
         return MaterialPageRoute(builder: (_) => SignupScreen());
+      case orderHistoryScreen:
+        return MaterialPageRoute(builder: (_) => OrderHistoryScreen());
       case category1:
         final searchQuery = settings.arguments as String?;
 
@@ -46,6 +51,7 @@ class AppRoutes {
         return MaterialPageRoute(builder: (_) => BookListPage());
       case splashscreen:
         return MaterialPageRoute(builder: (_) => SplashScreen());
+
       case userAccount:
         // Ensure `settings.arguments` contains the required `userId`
         if (settings.arguments != null && settings.arguments is String) {
@@ -85,5 +91,20 @@ class AppRoutes {
           ),
         );
     }
+  }
+}
+
+class AuthWrapper extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder<User?>(
+      stream: FirebaseAuth.instance.authStateChanges(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.active) {
+          return snapshot.hasData ? MainScreen() : LoginScreen();
+        }
+        return Center(child: CircularProgressIndicator());
+      },
+    );
   }
 }
