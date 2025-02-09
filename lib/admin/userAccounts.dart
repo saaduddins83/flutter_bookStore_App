@@ -11,7 +11,7 @@ class UserAccountPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Account Details'),
+        title: const Text('Account Detailss'),
         backgroundColor: Colors.teal,
         centerTitle: true,
         elevation: 5,

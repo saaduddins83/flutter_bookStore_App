@@ -125,7 +125,7 @@ class _BookListPageState extends State<BookListPage> {
                               context,
                               AppRoutes.updatebooks,
                               arguments: {
-                                'id': book.id, // Firestore document ID
+                                'ids': book.id, // Firestore document ID
                                 'title': bookData['title'],
                                 'author': bookData['author'],
                                 'price': bookData['price'],
