@@ -1,6 +1,7 @@
 import 'package:app_book_store/admin/floatingActionButton.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:app_book_store/models/product.dart';
 
 class UpdateBooks extends StatefulWidget {
   final dynamic data; // Pass the book document ID or data
@@ -13,18 +14,20 @@ class UpdateBooks extends StatefulWidget {
 class _UpdateBooksState extends State<UpdateBooks> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _titleController = TextEditingController();
-  final TextEditingController _authorController = TextEditingController();
+  final TextEditingController _imageController = TextEditingController();
   final TextEditingController _priceController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
+  final TextEditingController _ratingController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
     // Pre-fill the form fields with existing data
     _titleController.text = widget.data['title'];
-    _authorController.text = widget.data['author'];
+    _imageController.text = widget.data['images']?[0] ?? '';
     _priceController.text = widget.data['price'].toString();
     _descriptionController.text = widget.data['description'];
+    _ratingController.text = widget.data['rating']?.toString() ?? '';
   }
 
   Future<void> _updateBook() async {
@@ -32,13 +35,22 @@ class _UpdateBooksState extends State<UpdateBooks> {
       try {
         final firestore = FirebaseFirestore.instance;
 
+        // Collect updated book data
+        final updatedProduct = Product(
+          id: widget.data['id'],
+          title: _titleController.text,
+          categories: widget.data['categories'] ?? ['Technology', 'Design'],
+          images: [_imageController.text],
+          rating: double.parse(_ratingController.text),
+          price: double.parse(_priceController.text),
+          description: _descriptionController.text,
+        );
+
         // Update the book in Firestore using the document ID
-        await firestore.collection('books').doc(widget.data['id']).update({
-          'title': _titleController.text,
-          'author': _authorController.text,
-          'price': double.parse(_priceController.text),
-          'description': _descriptionController.text,
-        });
+        await firestore
+            .collection('products')
+            .doc(widget.data['id'])
+            .set(updatedProduct.toJson());
 
         // Show success message
         ScaffoldMessenger.of(context).showSnackBar(
@@ -61,6 +73,8 @@ class _UpdateBooksState extends State<UpdateBooks> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Update Book'),
+        backgroundColor: Colors.teal,
+        centerTitle: true,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -69,9 +83,10 @@ class _UpdateBooksState extends State<UpdateBooks> {
           child: SingleChildScrollView(
             child: Column(
               children: [
-                TextFormField(
+                // Title Field
+                _buildTextField(
                   controller: _titleController,
-                  decoration: const InputDecoration(labelText: 'Title'),
+                  label: 'Title',
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Please enter the title';
@@ -79,21 +94,38 @@ class _UpdateBooksState extends State<UpdateBooks> {
                     return null;
                   },
                 ),
-                const SizedBox(height: 10),
-                TextFormField(
-                  controller: _authorController,
-                  decoration: const InputDecoration(labelText: 'Author'),
+
+                // Image URL Field
+                _buildTextField(
+                  controller: _imageController,
+                  label: 'Image URL',
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Please enter the author';
+                      return 'Please enter the image URL';
                     }
                     return null;
                   },
                 ),
-                const SizedBox(height: 10),
-                TextFormField(
+
+                // Rating Field
+                _buildTextField(
+                  controller: _ratingController,
+                  label: 'Rating',
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter the rating';
+                    }
+                    if (double.tryParse(value) == null) {
+                      return 'Please enter a valid number';
+                    }
+                    return null;
+                  },
+                ),
+
+                // Price Field
+                _buildTextField(
                   controller: _priceController,
-                  decoration: const InputDecoration(labelText: 'Price'),
+                  label: 'Price',
                   keyboardType: TextInputType.number,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
@@ -105,10 +137,12 @@ class _UpdateBooksState extends State<UpdateBooks> {
                     return null;
                   },
                 ),
-                const SizedBox(height: 10),
-                TextFormField(
+
+                // Description Field
+                _buildTextField(
                   controller: _descriptionController,
-                  decoration: const InputDecoration(labelText: 'Description'),
+                  label: 'Description',
+                  maxLines: 3,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Please enter the description';
@@ -116,10 +150,23 @@ class _UpdateBooksState extends State<UpdateBooks> {
                     return null;
                   },
                 ),
+
                 const SizedBox(height: 20),
+
+                // Update Book Button
                 ElevatedButton(
                   onPressed: _updateBook,
-                  child: const Text('Update Data'),
+                  style: ElevatedButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 40, vertical: 15),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                  ),
+                  child: const Text(
+                    'Update Book',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
                 ),
               ],
             ),
@@ -127,6 +174,33 @@ class _UpdateBooksState extends State<UpdateBooks> {
         ),
       ),
       floatingActionButton: NavigationFAB(),
+    );
+  }
+
+  Widget _buildTextField({
+    required TextEditingController controller,
+    required String label,
+    TextInputType? keyboardType,
+    int maxLines = 1,
+    String? Function(String?)? validator,
+  }) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 16.0),
+      child: TextFormField(
+        controller: controller,
+        decoration: InputDecoration(
+          labelText: label,
+          labelStyle: const TextStyle(fontSize: 16),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(8),
+          ),
+          filled: true,
+          fillColor: Colors.teal.shade50,
+        ),
+        keyboardType: keyboardType,
+        maxLines: maxLines,
+        validator: validator,
+      ),
     );
   }
 }

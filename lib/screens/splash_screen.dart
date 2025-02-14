@@ -27,32 +27,32 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     // Screen dimensions
-    final size = MediaQuery.of(context).size;
-    final height = size.height;
-    final width = size.width;
+    final heightsize = MediaQuery.of(context).size.height;
+    final widthsize = MediaQuery.of(context).size.width;
+
 
     return Scaffold(
       backgroundColor: const Color(0xFFCBD5F0),
       body: SafeArea(
         child: Padding(
           padding:
-              EdgeInsets.symmetric(horizontal: width * 0.05), // 5% of width
+              EdgeInsets.symmetric(horizontal: widthsize * 0.05), // 5% of width
           child: SingleChildScrollView(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                SizedBox(height: height * 0.02), // 2% of height
+                SizedBox(height: heightsize * 0.02), // 2% of height
                 Column(
                   children: [
                     // Image/Illustration
                     const Image(
                       image: AssetImage('assets/getstarted_image.png'),
                     ),
-                    SizedBox(height: height * 0.06), // 6% of height
+                    SizedBox(height: heightsize * 0.06), // 6% of height
                     // Title Text
                     Padding(
                       padding:
-                          EdgeInsets.only(left: width * 0.10), // 10% of width
+                          EdgeInsets.only(left: widthsize * 0.10), // 10% of width
                       child: Align(
                         alignment: Alignment.centerLeft,
                         child: Text(
@@ -60,18 +60,18 @@ class _SplashScreenState extends State<SplashScreen> {
                           textAlign: TextAlign.left,
                           style: TextStyle(
                             fontFamily: 'Plus Jakarta Sans',
-                            fontSize: width * 0.09, // 9% of width
+                            fontSize: widthsize * 0.09, // 9% of width
                             fontWeight: FontWeight.bold,
                             color: const Color(0xFF232743),
                           ),
                         ),
                       ),
                     ),
-                    SizedBox(height: height * 0.01), // 1% of height
+                    SizedBox(height: heightsize * 0.01), // 1% of height
                     // Subtitle Text
                     Padding(
                       padding:
-                          EdgeInsets.only(left: width * 0.1), // 10% of width
+                          EdgeInsets.only(left: widthsize * 0.1), // 10% of width
                       child: Align(
                         alignment: Alignment.centerLeft,
                         child: Text(
@@ -79,7 +79,7 @@ class _SplashScreenState extends State<SplashScreen> {
                           textAlign: TextAlign.left,
                           style: TextStyle(
                             fontFamily: 'Plus Jakarta Sans',
-                            fontSize: width * 0.03, // 3% of width
+                            fontSize: widthsize * 0.03, // 3% of width
                             color: Colors.black54,
                           ),
                         ),
@@ -98,17 +98,17 @@ class _SplashScreenState extends State<SplashScreen> {
                     const CircularProgressIndicator(
                       color: Color(0xFF232743),
                     ),
-                    SizedBox(height: height * 0.02), // 2% of height
+                    SizedBox(height: heightsize * 0.02), // 2% of height
                     // Loading text
                     Text(
                       'Loading...',
                       style: TextStyle(
-                        fontSize: width * 0.04, // 4% of width
+                        fontSize: widthsize * 0.04, // 4% of width
                         color: const Color(0xFF232743),
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    SizedBox(height: height * 0.02), // 2% of height
+                    SizedBox(height: heightsize * 0.02), // 2% of height
                   ],
                 ),
               ],

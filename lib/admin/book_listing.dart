@@ -22,7 +22,7 @@ class _BookListPageState extends State<BookListPage> {
         elevation: 5,
       ),
       body: StreamBuilder<QuerySnapshot>(
-        stream: FirebaseFirestore.instance.collection('books').snapshots(),
+        stream: FirebaseFirestore.instance.collection('products').snapshots(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
@@ -69,6 +69,7 @@ class _BookListPageState extends State<BookListPage> {
                           decoration: BoxDecoration(
                             color: Colors.teal[100],
                             borderRadius: BorderRadius.circular(8),
+                            image: NetworkImage(['image']),
                           ),
                           child: const Icon(Icons.book,
                               size: 40, color: Colors.teal),
@@ -131,6 +132,7 @@ class _BookListPageState extends State<BookListPage> {
                                 'author': bookData['author'],
                                 'price': bookData['price'],
                                 'description': bookData['description'],
+                                'image': bookData['image'],
                               },
                             );
                           },
@@ -143,7 +145,7 @@ class _BookListPageState extends State<BookListPage> {
                             onPressed: () async {
                               try {
                                 await FirebaseFirestore.instance
-                                    .collection('books')
+                                    .collection('products')
                                     .doc(book.id)
                                     .delete();
 
