@@ -69,7 +69,7 @@ class _BookListPageState extends State<BookListPage> {
                           decoration: BoxDecoration(
                             color: Colors.teal[100],
                             borderRadius: BorderRadius.circular(8),
-                            image: NetworkImage(['image']),
+                            // image: NetworkImage(['image']),
                           ),
                           child: const Icon(Icons.book,
                               size: 40, color: Colors.teal),
